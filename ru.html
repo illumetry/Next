@@ -1,0 +1,966 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"><title>Illumetry</title><meta property="og:site_name" content="Illumetry"><meta property="og:title" content="Illumetry"><meta property="twitter:title" content="Illumetry"><meta property="twitter:card" content="summary_large_image"><meta property="og:url" content="https://staticsharp.github.io/ru"><meta property="twitter:url" content="https://staticsharp.github.io/ru"><meta property="description" content="Component oriented static-site generator
+extendable with C#"><meta property="og:description" content="Component oriented static-site generator
+extendable with C#"><meta property="twitter:description" content="Component oriented static-site generator
+extendable with C#"><meta property="og:type" content="website"><meta property="og:image" content="https://staticsharp.github.io/Assets/0AA99E00D727B2C0C140E3A1B811C23D.png"><meta property="og:image:width" content="1024"><meta property="og:image:height" content="1024"><meta property="twitter:image" content="https://staticsharp.github.io/Assets/0AA99E00D727B2C0C140E3A1B811C23D.png"><link rel="icon" type="image/svg+xml" href="Assets/2CA6BB90F7F90FA6D28AED4F1F3ECEF5.svg"><script>function ToCssSize(n){return n!=undefined?n.toFixed(4)+"px":""}function ToCssValue(n){return n!=undefined?n:""}function DepthToStyle(n){return new Reaction(()=>{n.style.zIndex=n.Depth})}function XToStyle(n){return new Reaction(()=>{n.style.left=ToCssSize(n.X)})}function YToStyle(n){return new Reaction(()=>{n.style.top=ToCssSize(n.Y)})}function WidthToStyle(n){return new Reaction(()=>{n.style.width=ToCssSize(n.Width)})}function HeightToStyle(n){return new Reaction(()=>{n.style.height=ToCssSize(n.Height)})}function Enumerable(n){if(typeof n=="function"){this[Symbol.iterator]=n;return}if(typeof n[Symbol.iterator]=="function"){this[Symbol.iterator]=n[Symbol.iterator].bind(n);return}throw new Error("Invalid source type");}function as(n,t){return n==undefined?undefined:typeof n.as=="function"?n.as(t):undefined}function convert(n,t){var i=as(n,t);if(i==undefined){let i=`Failed to convert element to type ${t}`;console.error(i,n);throw new Error(i);}return i}function _deleteScript(){let n=document.currentScript,t=n.parentElement;return t.removeChild(n),t}function getCurrentParent(){return parentStack.length>0?parentStack[parentStack.length-1]:undefined}function SetCurrentSocket(n){var i=_deleteScript(),t=getCurrentParent();currentSocket=t.Reactive[n]}function AssignToParentProperty(n){var t=_deleteScript();let i=getCurrentParent();i[n]=t}function AssignPreviousTagToParentProperty(n){var t=_deleteScript();let i=t.lastChild,r=getCurrentParent();r[n]=i}function Constructor(){var n=_deleteScript();for(let t of arguments)t(n);return currentSocket&&currentSocket.setValue(n),currentSocket=n.Reactive.FirstChild,parentStack.push(n),n}function Pop(){let n=_deleteScript();currentSocket=n.Reactive.NextSibling;parentStack.pop();typeof n.AfterChildren=="function"&&n.AfterChildren()}function CamelToKebab(n){return n.replace(/[A-Z]+(?![a-z])|[A-Z]/g,(n,t)=>(t?"-":"")+n.toLowerCase())}function CreateSocket(n,t,i){let r=new Property;return r.attach(n,t),r.onAssign=function(n,t){if(n!=t){if(n){n.place=undefined;n.Parent=undefined;n.Layer();let t=n.NextSibling;while(t)t.Parent=undefined,t.Layer(),t=t.NextSibling}if(t&&(t.place&&t.place.setValue(undefined),t.place=r,t.Parent=i,t.Layer(),i!=undefined)){let n=t.NextSibling;while(n)n.Parent=i,n.Layer(),n=n.NextSibling}}},r}function CreateCollectionSocket(n,t,i){let u=t+"First",f=CreateSocket(n,u,i);var r=new DomLinkedList(f);n[t]=r;n["Existing"+t]=r.Where(n=>n.Exists)}function Create(n,...t){let r=t[0],u=CamelToKebab(r.name),i=document.createElement(u);n.appendChild(i);i.Parent=n;for(let n of t)n(i);return i}function ReactionBase(n){let t=this;t.triggeringProperties=new Set;t.func=n;t.addTriggeringProperty=function(n){t.triggeringProperties.add(n);n.dependentReactions.add(t)};t.unsubscribeFromTriggeringProperty=function(n){return n.dependentReactions.delete(t)?(t.triggeringProperties.delete(n),!0):!1};t.unsubscribeFromTriggeringProperties=function(){if(t.triggeringProperties.size!=0){for(let n of t.triggeringProperties)n.dependentReactions.delete(t);t.triggeringProperties.clear()}};t.execute=function(n){let i=Reaction.current;Reaction.current=t;t.unsubscribeFromTriggeringProperties();try{return t.func(n)}finally{Reaction.current=i}};t.dirtImmune=!1}function Reaction(n){let t=this;if(ReactionBase.call(t,n),t.makeDirty=function(){t.dirtImmune||Reaction.deferred.add(t)},Reaction.deferred)Reaction.deferred.add(t);else{let n=Reaction.beginDeferred();try{t.execute()}catch(i){console.warn(i)}n.end()}}function Binding(n,t){let i=this;ReactionBase.call(i,n);i.dirty=!0;i.makeDirty=function(){i.dirty||(i.dirty=!0,t())}}function Property(){let n=this;n.name="";n.object=null;n.dependentReactions=new Set;n.binding=undefined;n.makeDirty=function(){n.binding.makeDirty()};n.onBindingBecameDirty=function(){n.makeDependentReactionsDirty()};n.makeDependentReactionsDirty=function(){if(n.dependentReactions.size!=0){var t=Reaction.beginDeferred();n.dependentReactions.forEach(n=>n.makeDirty());t.end()}};n.executionInProgress=!1;n.replaceValue=function(n){let t=Reaction.current;Reaction.current=undefined;let i=n(this.getValue());this.setValue(i);Reaction.current=t};n.getValue=function(){if(Reaction.current&&Reaction.current.addTriggeringProperty(n),n.binding&&n.binding.dirty){if(n.executionInProgress)return n.reactionsWhoReceivedOldValue==undefined&&(n.reactionsWhoReceivedOldValue=new Set),n.reactionsWhoReceivedOldValue.add(Reaction.current),n.value;try{var t=n.value;try{n.executionInProgress=!0;n.value=n.binding.execute(n.object)}finally{if(n.executionInProgress=!1,n.binding.dirty=!1,n.reactionsWhoReceivedOldValue){if(n.value!==t){let t=Reaction.beginDeferred();n.reactionsWhoReceivedOldValue.forEach(n=>n.makeDirty());t.end()}n.reactionsWhoReceivedOldValue=undefined}}}catch(i){console.error(i)}}return n.value};n.onAssign=undefined;n.setValue=function(t){var i;if(typeof t=="function"){if(t.isBindingConstructor&&(t=t(n),console.log("isBindingConstructor",t,this.object)),n.binding){if(n.binding.func===t)return;n.binding.unsubscribeFromTriggeringProperties()}n.binding=new Binding(t,n.onBindingBecameDirty)}else{if(n.binding&&(n.binding.unsubscribeFromTriggeringProperties(),n.binding=undefined),n.onAssign){i=Reaction.beginDeferred();n.onAssign(n.value,t);i.end()}if(n.value===t)return;n.value=t}i=Reaction.beginDeferred();n.makeDependentReactionsDirty();i.end()};n.attach=function(t,i){n.name=i;n.object=t;let r={get:function(){return n.getValue()},set:function(t){n.setValue(t)}};return Object.defineProperty(t,i,r),t["__"+i]=n,n}}function OnChanged(n,t){let i=undefined;return new Reaction(()=>{let r=n();if(r!=i){let n=Reaction.beginNonReactive();t(i,r);n.end();i=r}})}function OnTruthify(n,t){let i=undefined;return new Reaction(()=>{let r=n();if(r===!0&&!i==!0){let n=Reaction.beginNonReactive();t();n.end()}i=r})}function Entity(n){n.isEntity=!0;n.as=function(t){return n.is(t)?n:undefined};n.is=function(t){return n["is"+t]!=undefined}}function CreateLayer(n){function u(n){let i=n.binding!=undefined,r=i?n.binding.func:n.value,t=new Property;return t.name="Backup_"+n.name,t.object=n.object,t.setValue(r),t}function i(n,i){let r=t.get(i);if(r==undefined){if(!Property.exists(n,i))throw new Error(`Element does not have property "${i}"`);r=u(n.Reactive[i]);t.set(i,r)}return r}let t=new Map;let r=function(){let i=Reaction.beginDeferred();t.forEach(function(t,i){let r=t.binding?t.binding.func:t.value;n[i]=r});t.clear();i.end()};r.element=n;let f=new Proxy(r,{get(n,t){var r=i(n.element,t);return r.getValue()},set(n,t,r){var u=i(n.element,t);return n.element[t]=r,!0}});n.Layer=f}function ClearLayer(n){if(n.Layer&&n.Layer.backupProperties){let t=Reaction.beginDeferred();n.Layer.backupProperties.forEach(function(t,i){let r=t.binding?t.binding.func:t.value;n[i]=r});n.Layer.backupProperties.clear();t.end()}}function SyncChildren(n,t){let i=[...n.children];t=[...t];for(let r=0;r<i.length;r++){let u=i[r];t.includes(u)||n.removeChild(u)}for(let i=0;i<t.length;i++){let r=t[i];n.children[i]!=r&&n.insertBefore(r,n.children[i])}}function Hierarchical(n){Entity(n);n.isHierarchical=!0;CreateCollectionSocket(n,"UnmanagedChildren",n);CreateSocket(n,"NextSibling",()=>n.Parent);CreateLayer(n);n.Reactive={Exists:!0,Root:()=>n.Parent.Root,Parent:undefined}}function DomLinkedList(n){this.firstChildProperty=n;Enumerable.call(this,function*(){for(var t=n.getValue();t!=undefined;)yield t,t=t.NextSibling})}function Color(){let n=[...arguments],t=this;if(t.r=0,t.g=0,t.b=0,t.a=undefined,n.length!=0){if(n.length==1){let u=n[0];if(typeof u=="number"){t.b=(u&255)/255;t.g=((u&65280)>>>8)/255;t.r=((u&16711680)>>>16)/255;t.a=((u&4278190080)>>>24)/255;return}if(typeof u=="string"&&u.substr(0,1)=="#"){var i=(u.length-1)/3,r=[17,1,.062272][i-1]/255;t.r=parseInt(u.substr(1,i),16)*r;t.g=parseInt(u.substr(1+i,i),16)*r;t.b=parseInt(u.substr(1+2*i,i),16)*r;return}console.warn("Color: Invalid arguments",u)}if(n.length>=3&n.length<=4){if(n.slice(0,3).some(n=>typeof n!="number")){console.warn("Color: Invalid arguments types",n);return}if(t.r=n[0],t.g=n[1],t.b=n[2],n[3]!=undefined){if(typeof n[3]!="number"){console.warn("Color: Invalid arguments types",n);return}t.a=n[3]}return}console.warn("Color: Invalid arguments",n)}}function BaseModifier(n){Hierarchical(n);n.isModifier=!0;let t=n.as;n.as=function(i){let r=t(i);if(r!=undefined)return r;if(n.Modifiers!=undefined){let t=n.as;n.as=()=>undefined;r=n.Modifiers.find(n=>n.is(i));n.as=t}return r};n.Modifiers=undefined;n.Reactive={Hover:!1,Selectable:undefined,BackgroundColor:undefined,HierarchyBackgroundColor:()=>n.BackgroundColor||n.Parent.HierarchyBackgroundColor,ForegroundColor:()=>n.BackgroundColor!=undefined?n.BackgroundColor.ContrastColor():undefined,HierarchyForegroundColor:()=>{let t=n.ForegroundColor;if(t)return t;let i=n.Parent;return i&&(t=i.HierarchyForegroundColor,t)?t:new Color(0)},TextDecorationColor:()=>n.ForegroundColor!=undefined?n.ForegroundColor:undefined,Radius:undefined,RadiusTopLeft:()=>n.Radius,RadiusTopRight:()=>n.Radius,RadiusBottomLeft:()=>n.Radius,RadiusBottomRight:()=>n.Radius,Visibility:1};new Reaction(()=>{let t=n.Visibility;t==0?(n.style.visibility="hidden",n.style.opacity=""):t==1?(n.style.visibility="",n.style.opacity=""):(n.style.opacity=t,n.style.visibility="")});new Reaction(()=>{n.style.borderTopLeftRadius=ToCssSize(n.RadiusTopLeft),n.style.borderTopRightRadius=ToCssSize(n.RadiusTopRight),n.style.borderBottomLeftRadius=ToCssSize(n.RadiusBottomLeft),n.style.borderBottomRightRadius=ToCssSize(n.RadiusBottomRight)});new Reaction(()=>{let t=n.Selectable;n.style.userSelect=t!=undefined?n.Selectable?"text":"none":""});new Reaction(()=>{n.style.backgroundColor=ToCssValue(n.BackgroundColor)});new Reaction(()=>{n.style.color=ToCssValue(n.ForegroundColor)});new Reaction(()=>{n.style.textDecorationColor=ToCssValue(n.TextDecorationColor)})}function Page(n){function i(){return t.clientWidth}function r(){return t.clientHeight}function f(n){window.AnimationFrameTime=n;window.requestAnimationFrame(n=>{f(n)})}function o(n){let t=window.matchMedia(`screen and (resolution: ${window.devicePixelRatio}dppx)`);t.addEventListener("change",()=>{n(),o(n)},{once:!0})}function s(){let t=Reaction.beginDeferred();window.DevicePixelRatio=window.devicePixelRatio;n.Width=i();n.Height=r();t.end()}n.classList.add("js");n.isRoot=!0;Block(n);var t=document.body.parentNode;let u=0;window.Reactive={Root:n,AnimationFrameTime:0,AnimationFrame:()=>(u++,window.requestAnimationFrame(()=>{window.Reactive.AnimationFrame.makeDirty()}),u),UserInteracted:!1,DevicePixelRatio:window.devicePixelRatio,Touch:!1};f(performance.now());let e=window.matchMedia("(pointer: coarse)");window.Touch=e.matches;e.onchange=n=>{window.Touch=n.matches};n.Reactive={Root:n,FontSize:16,HierarchyFontSize:n=>n.FontSize,BackgroundColor:new Color("#fff"),HierarchyBackgroundColor:()=>n.BackgroundColor,HierarchyForegroundColor:()=>n.ForegroundColor};let h=n.HtmlNodesOrdered;n.HtmlNodesOrdered=new Enumerable(function*(){yield*h;n.svgDefs&&(yield n.svgDefs);n.extras&&(yield n.extras)});new Reaction(()=>{n.Width=i(),n.Height=r()});window.onmousedown=()=>{window.UserInteracted=!0};o(()=>{s});window.onresize=function(){s()}}function CalcOffset(n,t,i){let u="Padding"+i,r="Margin"+i;return n[u]!=undefined?Math.max(n[u],t[r]||0):n[r]==undefined?t[r]||0:t[r]==undefined?0:Math.max(t[r]-n[r],0)}function GetClipRect(n,t,i,r,u){let o=-t,s=-i,h=-n.Width+r+t,c=-n.Height+u+i,l=`${s}px ${h}px ${c}px ${o}px`,e="",f=as(n,"BorderRadius");return f!=undefined&&(e=` round ${f.RadiusTopLeft||0}px ${f.RadiusTopRight||0}px ${f.RadiusBottomRight||0}px ${f.RadiusBottomLeft||0}px`),`inset(${l}${e})`}function Block(n){BaseModifier(n);n.isBlock=!0;n.Reactive={Depth:0,PaddingLeft:undefined,PaddingTop:undefined,PaddingRight:undefined,PaddingBottom:undefined,MarginLeft:undefined,MarginTop:undefined,MarginRight:undefined,MarginBottom:undefined,X:0,Y:0,AbsoluteX:()=>{let t=n.Parent;return t?Num.Sum(n.Parent.AbsoluteX,n.Parent.ScrollX,n.X):0},AbsoluteY:()=>{let t=n.Parent;return t?Num.Sum(n.Parent.AbsoluteY,-n.Parent.ScrollY,n.Y):0},Width:undefined,Height:undefined,FontSize:undefined,HierarchyFontSize:()=>n.FontSize||n.Parent.HierarchyFontSize,ClipByParent:!1};DepthToStyle(n);XToStyle(n);YToStyle(n);WidthToStyle(n);HeightToStyle(n);new Reaction(()=>{n.style.clipPath=n.ClipByParent&&n.Parent?GetClipRect(n.Parent,n.X,n.Y,n.Width,n.Height):""});n.Events.MouseEnter=()=>n.Hover=!0;n.Events.MouseLeave=()=>n.Hover=!1;n.HtmlNodesOrdered=new Enumerable(function*(){yield*n.ExistingUnmanagedChildren});new Reaction(()=>{let t=[...n.HtmlNodesOrdered];SyncChildren(n,t)});new Reaction(()=>{n.style.overflow=n.ClipChildren?"clip":""})}function Thumb(n){Block(n);n.Reactive={BackgroundColor:()=>n.Parent.HierarchyForegroundColor,Radius:()=>Num.Min(n.Width,n.Height)/2,Depth:1,Visibility:()=>window.Touch||n.ThumbSizeScale>=1?0:n.Hover?.5:.25}}function SetupPointerDrag(n,t){n.Events.PointerDown=()=>(event.stopPropagation(),event.preventDefault(),n.setPointerCapture(event.pointerId),n.Events.PointerMove=()=>{let n=event.movementX,i=event.movementY;(n!=0||i!=0)&&t(n,i)},n.Events.PointerUp=()=>{n.Events.PointerUp=undefined,n.Events.PointerMove=undefined},!1)}function ScrollView(n){Block(n);n.isScrollView=!0;var u=undefined;let t=document.createElement("scrollable");t.style.touchAction="manipulation";t.style.overflow="auto";t.Events.Scroll=()=>{if(u!="Property"){u="Event";let i=Reaction.beginDeferred();n.ScrollX=t.scrollLeft;n.ScrollY=t.scrollTop;i.end();u=undefined}};n.Reactive={InternalWidth:()=>Num.Sum(n.Child.Layer.Width,n.LeftOffset,n.RightOffset),InternalHeight:()=>Num.Sum(n.Child.Layer.Height,n.TopOffset,n.BottomOffset),Width:n=>n.InternalWidth,Height:n=>n.InternalHeight,LeftOffset:()=>CalcOffset(n,n.Child,"Left"),RightOffset:()=>CalcOffset(n,n.Child,"Right"),TopOffset:()=>CalcOffset(n,n.Child,"Top"),BottomOffset:()=>CalcOffset(n,n.Child,"Bottom"),ChildAreaWidth:()=>n.Width-n.LeftOffset-n.RightOffset,ChildAreaHeight:()=>n.Height-n.TopOffset-n.BottomOffset,ScrollX:undefined,ScrollY:undefined,ScrollBarThickness:4,ScrollBarMargin:2,ShowScrollBars:()=>!window.Touch};CreateSocket(n,"Child",n);CreateSocket(n,"VerticalThumb",n).setValue(Create(n,Thumb));CreateSocket(n,"HorizontalThumb",n).setValue(Create(n,Thumb));let i=n.VerticalThumb;i.Reactive={ThumbTravel:()=>n.Height-2*n.ScrollBarMargin,ThumbPositionScale:()=>i.ThumbTravel/n.Child.Layer.Height,ThumbSizeScale:()=>n.ChildAreaHeight/n.Child.Layer.Height,X:()=>n.Width-i.Width-n.ScrollBarMargin,Y:()=>n.ScrollBarMargin+n.ScrollY*i.ThumbPositionScale,Width:()=>n.ScrollBarThickness,Height:()=>i.ThumbTravel*i.ThumbSizeScale};let r=n.HorizontalThumb;r.Reactive={ThumbTravel:()=>n.Width-2*n.ScrollBarMargin,ThumbPositionScale:()=>r.ThumbTravel/n.Child.Width,ThumbSizeScale:()=>n.ChildAreaWidth/n.Child.Width,X:()=>n.ScrollBarMargin+n.ScrollX*r.ThumbPositionScale,Y:()=>n.Height-r.Height-n.ScrollBarMargin,Width:()=>r.ThumbTravel*r.ThumbSizeScale,Height:()=>n.ScrollBarThickness};n.HtmlNodesOrdered=new Enumerable(function*(){yield i;yield r;yield t;yield*n.UnmanagedChildren});new Reaction(()=>{SyncChildren(t,[n.Child])});SetupPointerDrag(i,(n,r)=>{t.scrollTop+=r/i.ThumbPositionScale});SetupPointerDrag(r,n=>{t.scrollLeft+=n/r.ThumbPositionScale});new Reaction(()=>{n.Child.Layer.Width=Math.max(n.Child.Layer.Width,n.ChildAreaWidth),n.Child.Layer.Height=Math.max(n.Child.Layer.Height,n.ChildAreaHeight)});new Reaction(()=>{t.style.left=ToCssSize(n.LeftOffset),t.style.top=ToCssSize(n.TopOffset),t.style.width=ToCssSize(n.ChildAreaWidth),t.style.height=ToCssSize(n.ChildAreaHeight)});new Reaction(()=>{(n.ScrollY,n.ScrollX,u!="Event")&&(u="Property",window.requestAnimationFrame(()=>{t.scrollTop=n.ScrollY,t.scrollLeft=n.ScrollX,u=undefined}))})}function Modifier(n){Entity(this);this.isModifier=!0;let t=this,i=this.as;this.as=function(t){let r=i(t);if(r!=undefined)return r;let u=this.as;return this.as=()=>undefined,r=as(n,t),this.as=u,r};t.Reactive={Enabled:!0}}function SessionStorage(n){Modifier.call(this,n);this.isSessionStorage=!0;let t=this;t.Reactive={StoredValue:undefined,ValueToStore:undefined};new Reaction(()=>{sessionStorage.setItem(t.name,t.ValueToStore)})}function BlockWithChildren(n){Block(n);CreateCollectionSocket(n,"Children",n);let t=n.HtmlNodesOrdered;n.HtmlNodesOrdered=new Enumerable(function*(){yield*t;yield*n.ExistingChildren})}function LayoutPropertiesNames(n){this.side=[n?"Top":"Left",n?"Bottom":"Right"];this.coordinate=n?"Y":"X";this.dimension=n?"Height":"Width"}function LayoutBorder(n,t,i=0,r=0){this.layoutPrpertiesNames=t;this.sideIndex=n;this.oppositeSideIndex=(n+1)%2;this.marginStop=i;this.bodyStop=r}function LinearLayoutRegion(n){let t=new LayoutPropertiesNames(n);this.vertical=n;this.border=[new LayoutBorder(0,t),new LayoutBorder(1,t),]}function LinearLayout(n){BlockWithChildren(n);n.isLinearLayout=!0;n.Reactive={Vertical:!0,ItemGrow:1,Gap:0,GapGrow:0,StartGapGrow:0,EndGapGrow:0,PrimaryGravity:undefined,SecondaryGravity:undefined,Reverse:!1,OrderedChildren:n=>n.Reverse?n.ExistingChildren.Reverse().ToArray():n.ExistingChildren.ToArray(),InternalSecondarySize:n=>LayoutAlgorithms.ParallelMeasure(!n.Vertical,n,n.OrderedChildren),InternalPrimarySize:n=>LayoutAlgorithms.SequenceMeasure(n.Vertical,n,n.OrderedChildren,n.Gap),InternalWidth:n=>n.Vertical?n.InternalSecondarySize:n.InternalPrimarySize,InternalHeight:n=>n.Vertical?n.InternalPrimarySize:n.InternalSecondarySize,Width:n=>n.InternalWidth,Height:n=>n.InternalHeight,PrimarySize:n=>n.Vertical?n.Height:n.Width,SecondarySize:n=>n.Vertical?n.Width:n.Height};new Reaction(()=>{LayoutAlgorithms.ParallelLayout(!n.Vertical,n,n.OrderedChildren,n.SecondaryGravity)});new Reaction(()=>{LayoutAlgorithms.SequenceLayout(n.Vertical,n,n.OrderedChildren,n.InternalPrimarySize,n.PrimaryGravity,n.ItemGrow,n.Gap,n.GapGrow,n.StartGapGrow,n.EndGapGrow)})}function Flipper(n){Block(n);n.isFlipper=!0;CreateSocket(n,"First",n);CreateSocket(n,"Second",n);n.Reactive={Vertical:()=>n.Width<640,Proportion:.5,Gap:n=>n.MinContactMargin,MinContactMargin:n=>n.Vertical?Num.Min(n.LayoutFirst.MarginBottom,n.LayoutSecond.MarginTop)||0:Num.Min(n.LayoutFirst.MarginRight,n.LayoutSecond.MarginLeft)||0,MaxContactMargin:n=>n.Vertical?Num.Max(n.LayoutFirst.MarginBottom,n.LayoutSecond.MarginTop,0):Num.Max(n.LayoutFirst.MarginRight,n.LayoutSecond.MarginLeft,0),Reverse:!1,LayoutProportion:n=>n.Reverse?1-n.Proportion:n.Proportion,LayoutFirst:n=>n.Reverse?n.Second:n.First,LayoutSecond:n=>n.Reverse?n.First:n.Second,MarginTop:()=>n.PaddingTop!=undefined?undefined:n.Vertical?n.LayoutFirst.MarginTop:Num.Max(n.LayoutFirst.MarginTop,n.LayoutSecond.MarginTop),MarginBottom:()=>n.PaddingBottom!=undefined?undefined:n.Vertical?n.LayoutSecond.MarginBottom:Num.Max(n.LayoutFirst.MarginBottom,n.LayoutSecond.MarginBottom),MarginLeft:()=>n.PaddingLeft!=undefined?undefined:n.Vertical?Num.Max(n.LayoutFirst.MarginLeft,n.LayoutSecond.MarginLeft):n.LayoutFirst.MarginLeft,MarginRight:()=>n.PaddingRight!=undefined?undefined:n.Vertical?Num.Max(n.LayoutFirst.MarginRight,n.LayoutSecond.MarginRight):n.LayoutSecond.MarginRight,OrderedChildren:n=>[n.LayoutFirst,n.LayoutSecond],InternalSecondarySize:n=>LayoutAlgorithms.ParallelMeasure(!n.Vertical,n,n.OrderedChildren),InternalPrimarySize:n=>LayoutAlgorithms.SequenceMeasure(n.Vertical,n,n.OrderedChildren,n.Gap),InternalWidth:n=>n.Vertical?n.InternalSecondarySize:n.InternalPrimarySize,InternalHeight:n=>n.Vertical?n.InternalPrimarySize:n.InternalSecondarySize,Width:n=>n.InternalWidth,Height:n=>n.InternalHeight};n.HtmlNodesOrdered=new Enumerable(function*(){yield n.First;yield n.Second;yield*n.UnmanagedChildren});new Reaction(()=>{let i=n.LayoutFirst,r=n.LayoutSecond;LayoutAlgorithms.ParallelLayout(!n.Vertical,n,[i,r],undefined);let t=n.Gap;if(n.Vertical){if(Num.IsNaNOrNull(n.Height))return;LayoutAlgorithms.SequenceLayout(!0,n,[i,r],n.InternalHeight,undefined,1,t,0)}else{let f=n.Width;if(Num.IsNaNOrNull(f))return;let u=n.LayoutProportion;if(!Num.IsNaNOrNull(u)>0){u=Num.Clamp(u,0,1);let h=f-t,c=h*u+t,l=h*(1-u)+t,a=c-t,e=new LinearLayoutRegion(!1);e.border[0].SetFromContainer(n);e.border[1].bodyStop=t;e.border[1].marginStop=0;let s=e.border[0].Shift(i,0),v=e.GetSize(),y=c-v;i.Layer.X=s;i.Layer.Width=y;let o=new LinearLayoutRegion(!1);o.border[1].SetFromContainer(n);o.border[0].bodyStop=t;o.border[0].marginStop=0;s=o.border[0].Shift(r,0);let p=o.GetSize(),w=l-p;r.Layer.X=a+s;r.Layer.Width=w;return}LayoutAlgorithms.SequenceLayout(!1,n,[i,r],n.InternalWidth,undefined,1,t,0);return}})}function AspectBlock(n){Block(n);n.Reactive={NativeWidth:undefined,NativeHeight:undefined,NativeAspect:n=>n.NativeWidth/n.NativeHeight,Width:()=>Num.First(n.Height*n.NativeAspect,n.NativeWidth),Height:()=>Num.First(n.Width/n.NativeAspect,n.NativeHeight),Fit:"Inside",GravityVertical:0,GravityHorizontal:0}}function FitView(n){AspectBlock(n);n.isFitView=!0;n.Reactive={NativeWidth:n=>n.Child.Width,NativeHeight:n=>n.Child.Height};let t=document.createElement("underlay");CreateSocket(n,"Child",n);let i=n.HtmlNodesOrdered;n.HtmlNodesOrdered=new Enumerable(function*(){yield*i;yield t});new Reaction(()=>{SyncChildren(t,[n.Child])});new Reaction(()=>{let e=n.Fit,i=n.NativeWidth,r=n.NativeHeight,o=n.Width,s=n.Height;t.style.width=ToCssSize(i);t.style.height=ToCssSize(r);t.style.transformOrigin="top left";let h=0,c=0,u=1,f=1;if(u=o/i,f=s/r,e!="Stretch"){let l=n.GravityVertical,a=n.GravityHorizontal,v=o/s,t=e=="Inside"?1:-1,y=n.NativeAspect;t*v<t*y?(f=u,r=r*f,c=(s-r)*(.5*t*l+.5)):(u=f,i=i*u,h=(o-i)*(.5*t*a+.5))}t.style.transform=` translate(${h}px, ${c}px) scale(${u}, ${f})`;return})}function FitImage(n,t,i,r,u,f){if(r=="Stretch")t.style.width="100%",t.style.height="100%";else{let h=n.Width,c=n.Height,v=h/c,l=0,a=0,e=h,o=c,s=r=="Inside"?1:-1;s*v<s*i?(o=e/i,a=(c-o)*(.5*s*u+.5)):(e=o*i,l=(h-e)*(.5*s*f+.5));t.style.top=ToCssSize(a);t.style.left=ToCssSize(l);t.style.width=ToCssSize(e);t.style.height=ToCssSize(o);t.style.clipPath=GetClipRect(n,l,a,e,o)}}function Image(n){AspectBlock(n);let t=n.HtmlNodesOrdered;n.HtmlNodesOrdered=new Enumerable(function*(){yield n.content;yield*t});new Reaction(()=>{FitImage(n,n.content,n.NativeAspect,n.Fit,n.GravityVertical,n.GravityHorizontal)})}function Paragraph(n){Block(n);n.isParagraph=!0;n.Reactive={NoWrap:!1,InternalWidth:()=>Num.Sum(n.MaxContentWidth,n.PaddingLeft,n.PaddingRight),InternalHeight:undefined,Width:n=>n.InternalWidth,Height:n=>n.InternalHeight,MaxContentWidth:n=>n.HierarchyFontSize/Paragraph.testFontSize*n.inlineContainer.maxWidth,MinContentWidth:n=>n.HierarchyFontSize/Paragraph.testFontSize*n.inlineContainer.minWidth,MaxContentHeight:n=>n.HierarchyFontSize/Paragraph.testFontSize*n.inlineContainer.maxHeight,MinContentHeight:n=>n.HierarchyFontSize/Paragraph.testFontSize*n.inlineContainer.minHeight,PaddingLeft:()=>n.BackgroundColor!=undefined?10:undefined,PaddingRight:()=>n.BackgroundColor!=undefined?10:undefined,PaddingTop:()=>n.BackgroundColor!=undefined?8:undefined,PaddingBottom:()=>n.BackgroundColor!=undefined?8:undefined,MarginLeft:()=>n.BackgroundColor!=undefined?0:10,MarginRight:()=>n.BackgroundColor!=undefined?0:10,MarginTop:()=>n.BackgroundColor!=undefined?0:8,MarginBottom:()=>n.BackgroundColor!=undefined?0:8};n.HtmlNodesOrdered=new Enumerable(function*(){yield n.inlineContainer;yield*n.UnmanagedChildren});new Reaction(()=>{let t=n.inlineContainer;n.TextAlignmentHorizontal=="JustifyIncludingLastLine"?(t.style.textAlign="justify",t.style.textAlignLast="justify"):(t.style.textAlignLast="",t.style.textAlign=n.TextAlignmentHorizontal===undefined?"":n.TextAlignmentHorizontal.toLowerCase())});new Reaction(()=>{if(n.Width!=undefined){n.style.width=ToCssSize(n.Width);let t=n.inlineContainer;t.style.fontSize=ToCssSize(n.HierarchyFontSize);t.style.transformOrigin="";t.style.transform="";t.style.width="";t.style.display="";t.style.left=ToCssSize(n.PaddingLeft);t.style.top=ToCssSize(n.PaddingTop);let i=n.NoWrap,r=i?n.MaxContentWidth:n.MinContentWidth,f=Num.Sum(r,n.PaddingLeft,n.PaddingRight);if(n.Width<f){let u=Num.Sum(n.Width,-n.PaddingLeft,-n.PaddingRight)/r;if(u>0){t.style.width=i?"max-content":"min-content";t.style.transformOrigin="top left";t.style.transform=`scale(${u}, ${u})`;let r=i?n.MinContentHeight:n.MaxContentHeight;n.InternalHeight=Num.Sum(r*u,n.PaddingTop,n.PaddingBottom)}else t.style.display="none",n.InternalHeight=Num.Sum(n.PaddingTop,n.PaddingBottom);return}let e=Num.Sum(n.MaxContentWidth,n.PaddingLeft,n.PaddingRight),u=n.Width-e;if(u>-.001){let i=Num.Sum(n.MinContentHeight,n.PaddingTop,n.PaddingBottom);n.InternalHeight=i;t.style.width=u>.001?ToCssSize(Num.Sum(n.Width,-n.PaddingLeft,-n.PaddingRight)):"max-content";return}t.style.width=ToCssSize(Num.Sum(n.Width,-n.PaddingLeft,-n.PaddingRight));let o=t.getBoundingClientRect(),s=Num.Sum(o.height,n.PaddingTop,n.PaddingBottom);n.InternalHeight=s}});HeightToStyle(n)}function BorderRadius(n){Modifier.call(this,n);this.isBorderRadius=!0;let t=this;t.Reactive={Radius:undefined,RadiusTopLeft:n=>n.Radius,RadiusTopRight:n=>n.Radius,RadiusBottomLeft:n=>n.Radius,RadiusBottomRight:n=>n.Radius};new Reaction(()=>{n.style.borderTopLeftRadius=ToCssSize(t.RadiusTopLeft),n.style.borderTopRightRadius=ToCssSize(t.RadiusTopRight),n.style.borderBottomLeftRadius=ToCssSize(t.RadiusBottomLeft),n.style.borderBottomRightRadius=ToCssSize(t.RadiusBottomRight)})}function AbstractInline(n){BaseModifier(n)}function SvgIcon(n){n.Reactive={StrokeColor:undefined,StrokeWidth:undefined};new Reaction(()=>{n.children[0].style.fill=n.HierarchyForegroundColor});new Reaction(()=>{n.StrokeColor!=undefined&&(n.children[0].style.stroke=n.StrokeColor)});new Reaction(()=>{n.StrokeWidth!=undefined&&(n.children[0].style.strokeWidth=ToCssSize(n.StrokeWidth))})}function SvgIconInline(n){AbstractInline(n);SvgIcon(n);n.Reactive={BaselineOffset:.14};let t=n.children[0];new Reaction(()=>{let t=n.BaselineOffset})}function AbstractBackground(n){Modifier.call(this,n);this.isAbstractBackground=!0;let t=this;t.Reactive={Enabled:!0,RawImage:undefined,X:0,Y:0,Width:undefined,Height:undefined,Repeat:"repeat",BlendMode:"normal"};t.getBackground=function(){let n=t.Width,r=n===undefined?"auto":n+"px",i=t.Height,u=i===undefined?"auto":i+"px";return{backgroundImage:t.RawImage,backgroundPosition:`${t.X}px ${t.Y}px`,backgroundSize:r+" "+u,backgroundRepeat:CamelToKebab(t.Repeat),backgroundBlendMode:CamelToKebab(t.BlendMode)}};new Reaction(()=>{var i=n.Modifiers.filter(n=>n.isAbstractBackground&&n.Enabled);if(i.length!=0&&i[0]==t){let t=i.map(n=>n.getBackground()).reverse();for(let i of Object.keys(t[0]))n.style[i]=t.map(n=>n[i]).join(",")}})}function BackgroundImage(n){AbstractBackground.call(this,n);this.isBackgroundImage=!0;let t=this;t.Reactive={Aspect:n=>n.NativeWidth/n.NativeHeight,Width:n=>Num.First(n.Height*n.Aspect,n.NativeWidth),Height:n=>Num.First(n.Width/n.Aspect,n.NativeHeight)}}function GridLayout(n){function t(n){if(n.length==0)return[];if(n.length==1&&n[0].length==1)return n;let i=n[0].length,r=n.length,t=Array(i),u=n[n.length-1];for(let f=0;f<i;f++){let e=u.length>=f+1,i=e?r:r-1;t[f]=Array(i);for(let r=0;r<i;r++)t[f][r]=n[r][f]}return t}BlockWithChildren(n);n.isGridLayout=!0;n.Reactive={NumColumns:2,NumExistingChildren:n=>n.ExistingChildren.Count(),CalculatedNumRows:n=>Math.ceil(n.NumExistingChildren/n.NumColumns),NumRows:n=>n.CalculatedNumRows,LayoutTypeX:GridLayoutType.EqualSpace,LayoutTypeY:GridLayoutType.Stack,GapX:0,GapY:0,GravityX:undefined,GravityY:undefined,Rows:n=>{let i=n.ExistingChildren.ToArray(),r=i.length,t=[];if(r==0)return t;let u=n.NumColumns,f=n.NumRows;for(let n=0;n<f;n++){var e=i.splice(0,u);t.push(e)}return t},RowsTransposed:n=>t(n.Rows),CellWidth:100,CellHeight:100,InternalWidth:()=>n.LayoutTypeX==GridLayoutType.EqualSpace?LayoutAlgorithms.Grid.EqualSpace.Measure(n,!1,n.RowsTransposed,n.GapX,n.CellWidth):LayoutAlgorithms.Grid.Stack.Measure(n,!1,n.RowsTransposed,n.GravityX,n.GapX),InternalHeight:()=>n.LayoutTypeY==GridLayoutType.EqualSpace?LayoutAlgorithms.Grid.EqualSpace.Measure(n,!0,n.Rows,n.GapY,n.CellHeight):LayoutAlgorithms.Grid.Stack.Measure(n,!0,n.Rows,n.GravityY,n.GapY),Width:n=>n.InternalWidth,Height:n=>n.InternalHeight};n.HtmlNodesOrdered=new Enumerable(function*(){yield*n.ExistingChildren;yield*n.UnmanagedChildren});new Reaction(()=>{n.LayoutTypeY==GridLayoutType.EqualSpace?LayoutAlgorithms.Grid.EqualSpace.Layout(n,!0,n.Rows,n.GravityY,n.GapY):LayoutAlgorithms.Grid.Stack.Layout(n,!0,n.Rows,n.GravityY,n.GapY)});new Reaction(()=>{n.LayoutTypeX==GridLayoutType.EqualSpace?LayoutAlgorithms.Grid.EqualSpace.Layout(n,!1,n.RowsTransposed,n.GravityX,n.GapX):LayoutAlgorithms.Grid.Stack.Layout(n,!1,n.RowsTransposed,n.GravityX,n.GapX)})}function UserSelect(n){Modifier.call(this,n);this.isUserSelect=!0;let t=this;t.Reactive={Option:"None"};new Reaction(()=>{var i=t.Option;n.style.userSelect=i===undefined||i===""?"":CamelToKebab(i)})}function Hover(n){Modifier.call(this,n);this.isHover=!0;let t=this;t.Reactive={Value:!1};new Reaction(()=>{n.Exists||(t.Value=!1)});n.addEventListener("mouseenter",()=>t.Value=!0,!1);n.addEventListener("mouseleave",()=>t.Value=!1,!1)}function Outline(n){Modifier.call(this,n);this.isOutline=!0;let t=this;t.Reactive={Enabled:!0,Style:"Solid",Color:()=>n.HierarchyForegroundColor,Width:1,Offset:0};new Reaction(()=>{var i=n.Modifiers.findLast(n=>n.isOutline&&n.Enabled);i==t&&(n.style.outlineStyle=t.Style.toLowerCase(),n.style.outlineColor=t.Color.toString(),n.style.outlineWidth=`${t.Width}px`,n.style.outlineOffset=`${t.Offset}px`)})}var Num={},Animation,currentSocket,parentStack,parentGetDepth,Storage,GridLayoutOrder,GridLayoutType;Num.IsNaNOrNull=function(n){return n===null?!0:isNaN(n)};Num.Max=function(){let n=undefined;for(let t of arguments)Num.IsNaNOrNull(t)||(n=n===undefined?t:Math.max(n,t));return n};Num.Min=function(){let n=undefined;for(let t of arguments)Num.IsNaNOrNull(t)||(n=n===undefined?t:Math.min(n,t));return n};Num.Clamp=function(n,t,i){return Num.Max(t,Num.Min(i,n))};Num.Sum=function(){let n=!1,t=0;for(let i of arguments)Num.IsNaNOrNull(i)||(n=!0,t+=i);return n?t:undefined};Num.First=function(){for(let n of arguments)if(n!==undefined&&!isNaN(n)&&n!==null)return n;return undefined};Num.PiecewiseLinearInterpolation=function(n,...t){if(n==undefined)return undefined;if(t.length===0)throw new Error("Keyframes list must not be empty.");if(t.length===1||(t.sort((n,t)=>n[0]-t[0]),n<t[0][0]))return t[0][1];if(n>=t[t.length-1][0])return t[t.length-1][1];for(let i=1;i<t.length;i++)if(n<t[i][0]){const r=t[i][0]-t[i-1][0],u=(n-t[i-1][0])/r,f=t[i][1]-t[i-1][1];return t[i-1][1]+f*u}throw new Error("Keyframes are not sorted correctly.");};Enumerable.Empty=function(){return new Enumerable(function*(){})};Enumerable.prototype.ToArray=function(){return[...this]};Enumerable.Range=function(n,t){return new Enumerable(function*(){for(let i=n;i<n+t;i++)yield i})};Enumerable.FromArguments=function(){return new Enumerable(arguments)};Enumerable.prototype.Where=function(n){let t=this,i=function*(){for(let i of t)n(i)&&(yield i)};return new Enumerable(i)};Enumerable.prototype.Select=function(n){let t=this,i=function*(){for(let i of t)yield n(i)};return new Enumerable(i)};Enumerable.prototype.First=function(n=()=>true,t=()=>{throw new Error("Out of range");}){let r=this,u=r[Symbol.iterator]();for(;;){var i=u.next();if(i.done)return t();if(n(i.value))return i.value}};Enumerable.prototype.Last=function(n=()=>true){let t=[...this];if(t.length>0)for(let i=t.length-1;i>=0;i--)if(n(t[i]))return t[i]};Enumerable.prototype.Count=function(n){let t=[...this];if(n===undefined)return t.length;let i=0;for(let r=0;r<t.length;r++)n(t[r])&&i++;return i};Enumerable.prototype.Any=function(n=()=>true){var t;let r=this,i=r[Symbol.iterator]();if(n===undefined)return t=i.next(),!t.done;for(;;){if(t=i.next(),t.done)return!1;if(n(t.value))return!0}};Enumerable.prototype.Aggregate=function(n,t){let i=[...this],r=0;if(arguments.length==1){if(i.length==0)return undefined;r=1;t=i[0]}for(let u=r;u<i.length;u++)t=n(t,i[u]);return t};Enumerable.prototype.Max=function(){return this.Aggregate((n,t)=>n>t?n:t)};Enumerable.prototype.Min=function(){return this.Aggregate((n,t)=>n<t?n:t)};Enumerable.prototype.Sum=function(){return this.Aggregate((n,t)=>n+t)};Enumerable.prototype.Order=function(n=(n,t)=>n==t?0:(n<t?-1:1)){let t=[...this];return t.sort(n),new Enumerable(t)};Enumerable.prototype.OrderBy=function(n,t=function(t,i){let r=n(t);let u=n(i);return r==u?0:r<u?-1:1}){return this.Order(t)};Enumerable.prototype.Reverse=function(){let n=[...this],t=function*(){for(let t=n.length-1;t>=0;t--)yield n[t]};return new Enumerable(t)};Enumerable.prototype.Skip=function(n){let t=this,i=function*(){for(let i of t)n>0?n--:yield i};return new Enumerable(i)};Enumerable.prototype.Take=function(n){let t=this,i=function*(){for(let i of t)if(n>0)yield i,n--;else break};return new Enumerable(i)};Animation={};Animation.Duration=function(n,t){function u(n,t,i){return n+i*(t-n)}let i=n*1e3;if(this.startValue==undefined)return this.startValue=t,this.targetValue=t,this.currentValue=t,t;if(t!=this.targetValue)return this.startTime=window.AnimationFrameTime,this.startValue=this.currentValue,this.targetValue=t,this.currentValue;if(this.currentValue==this.targetValue)return this.currentValue;let r=window.AnimationFrameTime-this.startTime;if(r>=i)return this.currentValue=this.targetValue,this.currentValue;let f=Math.min(r/i,1);return this.currentValue=u(this.startValue,this.targetValue,f),this.currentValue};Animation.SpeedLimit=function(n,t){if(this.currentValue==undefined)return this.currentValue=t,t;if(this.currentValue!=t){let i=window.AnimationFrameTime;if(this.currentValueTime==undefined)this.currentValueTime=i;else{let u=(i-this.currentValueTime)*.001;this.currentValueTime=i;let f=t-this.currentValue,r=u*n;this.currentValue=Math.sign(f)>0?Math.min(this.currentValue+r,t):Math.max(this.currentValue-r,t)}this.currentValue!=t||(this.currentValueTime=undefined)}return this.currentValue};Animation.Loop=function(n,t,i){let r=window.AnimationFrameTime,f=n*1e3;if(this.currentValue==undefined)return this.startTime=r,this.currentValue=t,t;let e=i-t,o=r-this.startTime,u=o/f;return u>1?(this.startTime=r,this.currentValue=t,t):(this.currentValue=t+u*e,this.currentValue)};currentSocket=undefined;parentStack=[];Reaction.prototype=Object.create(ReactionBase.prototype);Reaction.prototype.constructor=Reaction;Reaction.beginDeferred=function(){return Reaction.deferred?{end:function(){}}:(Reaction.deferred=new Set,{end:function(){let n=64;while(Reaction.deferred.size>0&n>0){let t=Array.from(Reaction.deferred);for(let n of t){Reaction.deferred.delete(n);try{n.execute()}catch(i){console.warn(i)}}n--}n==0&&console.error("Recursive property binding",Reaction.deferred);Reaction.deferred=undefined}})};Reaction.beginNonReactive=function(){if(!Reaction.current){let n=Reaction.current;return Reaction.current=undefined,{end:function(){Reaction.current=n}}}return{end:function(){}}};Binding.prototype=Object.create(ReactionBase.prototype);Binding.prototype.constructor=Binding;Property.exists=function(n,t){var i=!!Object.getOwnPropertyDescriptor(n,t),r=n.hasOwnProperty("__"+t);return i&&r};Property.nameAvailable=function(n,t){return Object.getOwnPropertyDescriptor(n,t)?!1:n.hasOwnProperty(t)?!1:!0};Object.defineProperty(Object.prototype,"Reactive",{get:function(){return new Proxy(this,{get(n,t){return n["__"+t]},set:function(n,t,i){if(n.hasOwnProperty("__"+t)){const r=n["__"+t];r.setValue(i)}else{let r=new Property;r.setValue(i);r.attach(n,t)}}})},set:function(n){let t=this.Reactive,i=Reaction.beginDeferred();if(n instanceof Object)for(const[i,r]of Object.entries(n))t[i]=r;i.end()}});Object.defineProperty(Object.prototype,"Events",{get:function(){const n="___";return new Proxy(this,{get(t,i){return t[n+i]},set:function(t,i,r){function u(r){t[n+i]=r;t.addEventListener(i,r.handler,r)}if(i=i.toLowerCase(),t.hasOwnProperty(n+i)){let r=t[n+i];r!==undefined&&t.removeEventListener(i,r.handler)}r!==undefined&&(typeof r=="function"?u({handler:r,capture:!1}):typeof r=="object"?(typeof r.handler!="function"&&console.error("If the value is an object, it must have a 'handler' field of type 'function'"),r.capture=!1,u(r)):console.warn(`Type '${typeof r}' is invalid for event. To remove event handler assign 'undefined'`))}})}});parentGetDepth=1;Object.setPrototypeOf(DomLinkedList.prototype,Enumerable.prototype);DomLinkedList.prototype.InsertRange=function(n,t){if(n<0)throw new Error(`"startIndex" out of range : ${n}`);let i=this.firstChildProperty,r=0;while(r<n){if(!i.getValue())throw new Error(`Range to remove is out of collection range. "startIndex" : ${n}, "count" : ${count}`);r++;i=i.getValue().__NextSibling}var u=i.getValue();let f=Reaction.beginDeferred();i.setValue(t[0]);t[t.length-1].NextSibling=u;for(let[n,i]of t.entries())n<t.length-1&&(i.NextSibling=t[n+1]);f.end()};DomLinkedList.prototype.RemoveRange=function(n,t){if(t<1||n<0)throw new Error(`Range to remove is out of collection range. "startIndex" : ${n}, "count" : ${t}`);let i=this.firstChildProperty,u=i,r=undefined,f=[];for(let e=0;e<n+t;e++){if(!i.getValue())throw new Error(`Range to remove is out of collection range. "startIndex" : ${n}, "count" : ${t}`);e==n&&(u=i);e>=n&&f.push(i.getValue());e==n+t-1&&(r=i.getValue());i=i.getValue().__NextSibling}let e=Reaction.beginDeferred();return u.setValue(r.NextSibling),r.NextSibling=undefined,e.end(),f};DomLinkedList.prototype.Insert=function(n,t){this.InsertRange(n,[t])};DomLinkedList.prototype.RemoveAt=function(n){var t=this.RemoveRange(n,1);return t[0]};Color.prototype.toString=function(){let n=this.a||1;return`rgba(${Math.round(255*this.r)},${Math.round(255*this.g)},${Math.round(255*this.b)},${n})`};Color.CplusC=function(n,t){return new Color(n.r+t.r,n.g+t.g,n.b+t.b,n.a+t.a||n.a||t.a)};Color.CplusN=function(n,t){return new Color(n.r+t,n.g+t,n.b+t,n.a+t)};Color.NplusC=function(n,t){return new Color(n+t.r,n+t.g,n+t.b,n+t.a)};Color.CminusC=function(n,t){return new Color(n.r-t.r,n.g-t.g,n.b-t.b,n.a-t.a||n.a||t.a)};Color.CminusN=function(n,t){return new Color(n.r-t,n.g-t,n.b-t,n.a-t)};Color.NminusC=function(n,t){return new Color(n-t.r,n-t.g,n-t.b,n-t.a)};Color.CmulC=function(n,t){return new Color(n.r*t.r,n.g*t.g,n.b*t.b,n.a*t.a||n.a||t.a)};Color.CmulN=function(n,t){return new Color(n.r*t,n.g*t,n.b*t,n.a*t)};Color.NmulC=function(n,t){return new Color(n*t.r,n*t.g,n*t.b,n*t.a)};Color.FromGrayscale=function(n){return new Color(n,n,n)};Color.FromIntRGB=function(n){return new Color((n>>16&255)/255,(n>>8&255)/255,(n&255)/255)};Color.FromIntChannelsRGB=function(n,t,i){return new Color(n/255,t/255,i/255)};Color.FromIntChannelsRGBA=function(n,t,i,r){return new Color(n/255,t/255,i/255,r/255)};Color.Lerp=function(n,t,i){return n.Lerp(t,i)};Color.prototype.Lerp=function(n,t){var i=1-t,r=Num.First(this.a*i+n.a*t,this.a,n.a),u=this.r*i+n.r*t,f=this.g*i+n.g*t,e=this.b*i+n.b*t;return new Color(u,f,e,r)};Color.prototype.ContrastColor=function(n=1){var t=.2125*this.r+.7154*this.g+.0721*this.b,i=t>.5?new Color(0,0,0,this.a):new Color(1,1,1,this.a);return this.Lerp(i,n)};Storage={};Storage.Elements={};Storage.Restore=function(n,t){let r=sessionStorage,i=r.getItem(n);if(Storage.Elements[n]==undefined&&(Storage.Elements[n]=new Reaction(()=>{let i=t();r.setItem(n,typeof i+" "+i)})),i!=null){let r=i.indexOf(" "),n=i.substring(0,r),t=i.substring(r+1);if(n=="undefined")return undefined;if(n=="number")return Number(t);if(n=="boolean")return t==="true";if(n=="string")return t}else return undefined},function(){function u(){document.documentElement.style.visibility="hidden"}function f(){document.documentElement.style.visibility="visible"}function n(n,t){const i=new IntersectionObserver(n=>{t(n),i.disconnect()});for(const t of n)i.observe(t)}function e(t){const i=document.querySelectorAll(".inline-container");if(i.length==0){t();return}for(const n of i)n.style.fontSize=Paragraph.testFontSize+"px",n.style.width="min-content";n(i,r=>{for(const n of r){const t=n.boundingClientRect;n.target.minWidth=t.width;n.target.maxHeight=t.height}for(const n of i)n.style.width="max-content";n(i,n=>{for(const t of n){const n=t.boundingClientRect;t.target.maxWidth=n.width;t.target.minHeight=n.height}for(const n of i)n.style.width="",n.style.fontSize="";t()})})}function i(){if(t--,t==0){let n=performance.now();console.log("----readyToLayoutTime",n.toFixed(1));e(()=>{let t=performance.now();console.log("----inlineContainersMeasured",(t-n).toFixed(1));Initialize();let i=performance.now();console.log("----Initialize()",(i-t).toFixed(1));r.end();let u=performance.now();console.log("-----Reactions--",(u-i).toFixed(1));f();location.hash!==""&&window.requestAnimationFrame(()=>{location.href=location.hash})})}}let r=Reaction.beginDeferred();u();let t=2;document.fonts.ready.then(()=>{console.log("-------------Fonts ready--",performance.now().toFixed(1)),i()});window.addEventListener("DOMContentLoaded",function(){console.log("------DOMContentLoaded--",performance.now().toFixed(1));i()})}();LayoutBorder.prototype.SetFromContainer=function(n){let t=n["Padding"+this.layoutPrpertiesNames.side[this.sideIndex]];if(this.bodyStop=0,this.marginStop=0,t!==undefined)this.bodyStop=t;else{let t=n["Margin"+this.layoutPrpertiesNames.side[this.sideIndex]];t!==undefined&&(this.marginStop=-t)}};LayoutBorder.prototype.ShiftMaxOf=function(n){let t=0,i=0;for(let r of n){let n=r["Margin"+this.layoutPrpertiesNames.side[this.sideIndex]]||0,u=r["Margin"+this.layoutPrpertiesNames.side[this.oppositeSideIndex]]||0,f=r.Layer[this.layoutPrpertiesNames.dimension]||0,e=Math.max(this.bodyStop,this.marginStop+n);t=Math.max(t,e+f);i=Math.max(i,this.marginStop+u)}this.marginStop=t;this.bodyStop=i};LayoutBorder.prototype.Shift=function(n,t=undefined){let r=n["Margin"+this.layoutPrpertiesNames.side[this.sideIndex]]||0,u=n["Margin"+this.layoutPrpertiesNames.side[this.oppositeSideIndex]]||0;t==undefined&&(t=n.Layer[this.layoutPrpertiesNames.dimension]||0);let i=Math.max(this.bodyStop,this.marginStop+r);return this.marginStop=i+t,this.bodyStop=this.marginStop+u,i};LayoutBorder.prototype.ShiftByPixels=function(n){this.marginStop+=n;this.bodyStop+=n};LayoutBorder.prototype.ShiftByGap=function(n){this.bodyStop=Math.max(this.bodyStop,this.marginStop+n)};LinearLayoutRegion.prototype.GetSize=function(){return Math.max(this.border[0].marginStop+this.border[1].bodyStop,this.border[1].marginStop+this.border[0].bodyStop)};LinearLayoutRegion.formContainer=function(n,t){let i=new LinearLayoutRegion(t),r=new LayoutPropertiesNames(t),u=[n["Padding"+r.side[0]],n["Padding"+r.side[1]],];for(let t=0;t<2;t++)i.border[t].SetFromContainer(n);return i};window.LayoutAlgorithms||(window.LayoutAlgorithms={});LayoutAlgorithms.SequenceMeasure=function(n,t,i,r){let u=LinearLayoutRegion.formContainer(t,n);for(const[n,t]of i.entries())n>0&&u.border[0].ShiftByGap(r),u.border[0].Shift(t);return u.GetSize()};LayoutAlgorithms.SequenceLayout=function(n,t,i,r,u,f,e,o,s=0,h=0){var v=n?t.Height:t.Width,c=new LayoutPropertiesNames(n),a;let l=LinearLayoutRegion.formContainer(t,n);if(r>v){let n=v/r;for(const[r,t]of i.entries()){r>0&&(a=e*n,l.border[0].ShiftByGap(a));let i=t.Layer[c.dimension],u=l.border[0].Shift(t,i);t.Layer[c.coordinate]=u*n;t.Layer[c.dimension]=i*n}}else{let y=v-r,t=0,n=0;if(u==undefined)t=f*i.length+o*(i.length-1)+s+h,n=t!=0?y/t:0;else{let n=(.5*u+.5)*y;l.border[0].ShiftByPixels(n)}for(const[r,t]of i.entries()){r>0?(a=e+o*n,l.border[0].ShiftByGap(a)):l.border[0].ShiftByGap(s*n);let i=t.Layer[c.dimension]||0;i=i+f*n;let u=l.border[0].Shift(t,i);t.Layer[c.coordinate]=u;t.Layer[c.dimension]=i}}};LayoutAlgorithms.ParallelMeasure=function(n,t,i){var r=new LayoutPropertiesNames(n);let u=Num.Sum(t["Padding"+r.side[0]],t["Padding"+r.side[1]],0);for(let n of i){let i=CalcOffset(t,n,r.side[0]),f=CalcOffset(t,n,r.side[1]),e=Num.Sum(n.Layer[r.dimension],i+f);u=Num.Max(u,e)}return u};LayoutAlgorithms.ParallelLayout=function(n,t,i,r){var f=n?t.Height:t.Width,u;if(!Num.IsNaNOrNull(f))if(u=new LayoutPropertiesNames(n),r==undefined)for(let n of i){let i=CalcOffset(t,n,u.side[0]),r=CalcOffset(t,n,u.side[1]),e=f-i-r;n.Layer[u.coordinate]=i;n.Layer[u.dimension]=e}else for(let n of i){let i=CalcOffset(t,n,u.side[0]),h=CalcOffset(t,n,u.side[1]),e=n.Layer[u.dimension],o=f-i-h,s=o-e;s>0?i+=(.5*r+.5)*s:e=o;n.Layer[u.coordinate]=i;n.Layer[u.dimension]=e}};Paragraph.testFontSize=128;window.LayoutAlgorithms||(window.LayoutAlgorithms={});window.LayoutAlgorithms.Grid||(window.LayoutAlgorithms.Grid={});window.LayoutAlgorithms.Grid.EqualSpace||(window.LayoutAlgorithms.Grid.EqualSpace={});window.LayoutAlgorithms.Grid.EqualSpace.Measure=function(n,t,i,r,u){let f=new LayoutPropertiesNames(t),e=i.length,o=n["Padding"+f.side[0]]||0,s=n["Padding"+f.side[1]]||0;return o+e*u+(e-1)*r+s};window.LayoutAlgorithms.Grid.EqualSpace.Layout=function(n,t,i,r,u){let f=new LayoutPropertiesNames(t),c=n[f.dimension];if(!Num.IsNaNOrNull(c)){let o=i.length,s=n["Padding"+f.side[0]]||0,h=n["Padding"+f.side[1]]||0,l=n[f.dimension]-s-h,e=(l-(o-1)*u)/o;for(let t=0;t<o;t++){let c=i[t];for(let i=0;i<c.length;i++){let l=c[i],a=0,v=0,y=e,p=e,w=l.Layer[f.dimension]||0;if(r!=undefined){let t=.5*r+.5,n=e-w;console.log("extraPixels",n);n>0&&(a=n*t,y-=n*(1-t))}if(t==0){let t=CalcOffset(n,l,f.side[0])-s;v=t}else{let n=Math.max(l["Margin"+f.side[0]]||0,u)-u;v=n}if(t==o-1)p-=CalcOffset(n,l,f.side[1])-h;else{let n=l["Margin"+f.side[1]]||0;p-=Math.max(u,n)-u}y=Math.max(y,v+w);a=Math.min(a,p-w);let b=Math.max(a,v),k=Math.min(y,p);b+=t*(u+e)+s;k+=t*(u+e)+s;let d=k-b;l.Layer[f.coordinate]=b;l.Layer[f.dimension]=d}}}};window.LayoutAlgorithms||(window.LayoutAlgorithms={});window.LayoutAlgorithms.Grid||(window.LayoutAlgorithms.Grid={});window.LayoutAlgorithms.Grid.Stack||(window.LayoutAlgorithms.Grid.Stack={});LayoutAlgorithms.Grid.Stack.Measure=function(n,t,i,r,u){return window.LayoutAlgorithms.Grid.Stack.Common(!1,n,t,i,r,u)};LayoutAlgorithms.Grid.Stack.Layout=function(n,t,i,r,u){window.LayoutAlgorithms.Grid.Stack.Common(!0,n,t,i,r,u)};LayoutAlgorithms.Grid.Stack.Common=function(n,t,i,r,u,f){let s=r.length,l=r[0].length;var o=new LayoutPropertiesNames(i);let e=Array.from({length:l},()=>LinearLayoutRegion.formContainer(t,i)),h=u==undefined,c=h?0:.5*u+.5;for(let t=0;t<s;t++){let i=r[t],u=Array(i.length),l=i.map(n=>n.Layer[o.dimension]||0),a=0,v=undefined;h&&(v=Math.max(...l),n&&i.forEach(n=>n.Layer[o.dimension]=v));for(let n=0;n<i.length;n++){u[n]=e[n].border[0].Shift(i[n],v);let t=u[n]+l[n]*c;a=Math.max(a,t)}for(let t=0;t<i.length;t++){let r=a-l[t]*c,f=r-u[t];e[t].border[0].ShiftByPixels(f);n&&(i[t].Layer[o.coordinate]=r)}if(t==s-1){if(!n){let n=Math.max(...e.map(n=>n.border[0].bodyStop));e[0].bodyStop=n;return e[0].GetSize()}}else{let n=Math.max(...e.map(n=>Math.max(n.border[0].bodyStop,f+n.border[0].marginStop)));e.map(t=>t.border[0].bodyStop=n)}}};GridLayoutOrder={LeftToRight_TopToBottom:"LeftToRight_TopToBottom"};GridLayoutType={Stack:"Stack",EqualSpace:"EqualSpace"}</script><style>html{display:initial;position:initial;overscroll-behavior-x:none;overflow:hidden;overflow-x:hidden;overflow-y:hidden}.js{position:absolute;overflow:hidden;overflow-x:hidden;overflow-y:hidden;white-space:normal;touch-action:none;margin:0}.js *{scrollbar-width:none}.js *::-webkit-scrollbar{display:none}head{display:none}body{line-height:1.5;tab-size:4}body *{letter-spacing:inherit;touch-action:inherit;display:block;overflow-x:visible;overflow-y:visible;position:absolute;margin:0;visibility:inherit;margin-block-start:0;margin-block-end:0;margin-inline-start:0;margin-inline-end:0;line-height:inherit;text-decoration-line:inherit;text-decoration-color:inherit;color:inherit;justify-content:inherit;align-content:inherit;text-align:inherit;box-sizing:border-box;word-break:keep-all;white-space:inherit}.inline-container{white-space:break-spaces}.inline-container *{position:static;display:inline;vertical-align:baseline}.inline-container a{text-decoration-line:underline}</style><style>@font-face {font-family: 'Inter';font-weight: 500;font-style: normal;src: url(data:application/font-woff2;charset=utf-8;base64,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) format('woff2');}
+@font-face {font-family: 'Inter';font-weight: 400;font-style: normal;src: url(data:application/font-woff2;charset=utf-8;base64,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) format('woff2');}
+@font-face {font-family: 'Montserrat';font-weight: 500;font-style: normal;src: url(data:application/font-woff2;charset=utf-8;base64,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) format('woff2');}
+</style><script>function Initialize() {
+	let v9 = document.getElementById("v9")
+	Image(v9)
+	v9.Reactive =  {
+		Width:250,
+	}
+	v9.NativeWidth = 723
+	v9.NativeHeight = 128
+	v9.content = document.getElementById("v10")
+	let v11 = document.getElementById("v11")
+	Paragraph(v11)
+	v11.Reactive =  {
+		FontSize:20,
+		NoWrap:true,
+		BackgroundColor:new Color(0.42,0,1),
+		PaddingLeft:5,
+		PaddingRight:5,
+		PaddingTop:5,
+		PaddingBottom:5,
+	}
+	let v12 = new BorderRadius(v11)
+	v12.Reactive =  {
+		Radius:(e)=>(as(e,"Block").Height * 0.5),
+	}
+	v11.Modifiers = [v12]
+	let v14 = document.getElementById("v14")
+	AbstractInline(v14)
+	v14.Parent = v11
+	let v15 = document.getElementById("v15")
+	SvgIconInline(v15)
+	v15.Parent = v11
+	v11.inlineContainer = document.getElementById("v13")
+	let v8 = document.getElementById("v8")
+	LinearLayout(v8)
+	v8.Reactive =  {
+		Vertical:false,
+		ItemGrow:0,
+		GapGrow:1,
+		SecondaryGravity:0,
+		Gap:20,
+		Width:(e)=>Num.Max(e.Parent.Width,e.InternalWidth),
+	}
+	v8.ChildrenFirst = v9
+	v9.NextSibling = v11
+	let v7 = document.getElementById("v7")
+	FitView(v7)
+	v7.Reactive =  {
+		MarginLeft:30,
+		MarginRight:30,
+		MarginTop:30,
+		MarginBottom:30,
+	}
+	v7.Child = v8
+	let v16 = document.getElementById("v16")
+	Paragraph(v16)
+	v16.Reactive =  {
+		MarginLeft:30,
+		MarginRight:30,
+		MarginTop:30,
+		MarginBottom:30,
+		FontSize:90,
+	}
+	let v18 = document.getElementById("v18")
+	AbstractInline(v18)
+	v18.Reactive =  {
+		ForegroundColor:new Color(0.42,0,1),
+	}
+	v18.Parent = v16
+	v16.inlineContainer = document.getElementById("v17")
+	let v6 = document.getElementById("v6")
+	LinearLayout(v6)
+	v6.Reactive =  {
+		MarginLeft:(e)=>(as(e.Parent,"Flipper").Vertical?e.Parent.MarginLeft:0),
+		MarginRight:(e)=>(as(e.Parent,"Flipper").Vertical?e.Parent.MarginLeft:0),
+	}
+	v6.ChildrenFirst = v7
+	v7.NextSibling = v16
+	let v19 = document.getElementById("v19")
+	Image(v19)
+	v19.Reactive =  {
+		Fit:"Outside",
+	}
+	v19.NativeWidth = 1024
+	v19.NativeHeight = 1024
+	v19.content = document.getElementById("v20")
+	let v5 = document.getElementById("v5")
+	Flipper(v5)
+	v5.Reactive =  {
+		Proportion:0.42,
+		Vertical:(e)=>((e.Root.Height > e.Root.Width) || (e.Root.Width < 600)),
+		Reverse:(e)=>e.Vertical,
+		MarginLeft:(e)=>(e.Vertical?Num.Max(((e.Parent.Width - (e.Root.Height * 0.5)) / 2),0):0),
+		MarginRight:(e)=>(e.Vertical?Num.Max(((e.Parent.Width - (e.Root.Height * 0.5)) / 2),0):0),
+		Width:(e)=>(e.Vertical?Num.Max(e.InternalWidth,500):e.InternalWidth),
+		Height:(e)=>(e.Vertical?e.InternalHeight:Num.Min(e.InternalHeight,(e.Root.Height * 0.9))),
+	}
+	v5.First = v6
+	v5.Second = v19
+	let v21 = document.getElementById("v21")
+	Block(v21)
+	v21.Reactive =  {
+		BackgroundColor:new Color(0.42,0,1),
+		Height:(e)=>Num.PiecewiseLinearInterpolation(e.Root.Width,[2500,40],[480,25]),
+	}
+	let v22 = new AbstractBackground(v21)
+	v22.Reactive =  {
+		Angle:0.25,
+	}
+	v22.RawImage = e=>`linear-gradient(${e.Angle||0}turn, #6B00FF,#BF1A89)`
+	let v23 = new BackgroundImage(v21)
+	v23.Reactive =  {
+		X:(()=>{const state0={};return (e)=>Animation.Loop.bind(state0)(10,0,-e.Width)})(),
+		Height:(e)=>(as(e,"Block").Height * 0.5),
+		Repeat:"RepeatX",
+		Y:(e)=>((as(e,"Block").Height - e.Height) * 0.5),
+	}
+	v23.RawImage = "url(Assets/EECA6F0115E572C7246CDF4CF0F90F30.png)"
+	v23.NativeWidth = 156
+	v23.NativeHeight = 16
+	v21.Modifiers = [v22,v23]
+	let v25 = document.getElementById("v25")
+	Image(v25)
+	v25.NativeWidth = 1266
+	v25.NativeHeight = 950
+	v25.content = document.getElementById("v26")
+	let v27 = document.getElementById("v27")
+	Image(v27)
+	v27.NativeWidth = 1266
+	v27.NativeHeight = 950
+	v27.content = document.getElementById("v28")
+	let v24 = document.getElementById("v24")
+	GridLayout(v24)
+	v24.Reactive =  {
+		NumColumns:(e)=>((e.Width > 1024)?3:1),
+	}
+	v24.ChildrenFirst = v25
+	v25.NextSibling = v27
+	let v31 = document.getElementById("v31")
+	Image(v31)
+	v31.NativeWidth = 1266
+	v31.NativeHeight = 950
+	v31.content = document.getElementById("v32")
+	let v33 = document.getElementById("v33")
+	Image(v33)
+	v33.NativeWidth = 1266
+	v33.NativeHeight = 950
+	v33.content = document.getElementById("v34")
+	let v30 = document.getElementById("v30")
+	Flipper(v30)
+	v30.First = v31
+	v30.Second = v33
+	let v37 = document.getElementById("v37")
+	Paragraph(v37)
+	v37.Reactive =  {
+		FontSize:(e)=>((e.Root.Width > 1024)?36:24),
+	}
+	v37.inlineContainer = document.getElementById("v38")
+	let v39 = document.getElementById("v39")
+	Paragraph(v39)
+	v39.inlineContainer = document.getElementById("v40")
+	let v41 = document.getElementById("v41")
+	Paragraph(v41)
+	v41.Reactive =  {
+		FontSize:20,
+		NoWrap:true,
+		BackgroundColor:(e)=>(as(e,"Hover").Value?new Color(0.724,0.012,0.491):new Color(0.749,0.102,0.537)),
+		PaddingTop:(e)=>(e.FontSize * 0.4),
+		PaddingBottom:(e)=>(e.FontSize * 0.4),
+		PaddingLeft:(e)=>(e.FontSize * 1.2),
+		PaddingRight:(e)=>(e.FontSize * 0.68),
+	}
+	let v42 = new BorderRadius(v41)
+	v42.Reactive =  {
+		Radius:(e)=>(as(e,"Block").Height * 0.5),
+	}
+	let v43 = new UserSelect(v41)
+	let v44 = new Hover(v41)
+	v41.Modifiers = [v42,v43,v44]
+	let v46 = document.getElementById("v46")
+	SvgIconInline(v46)
+	v46.Parent = v41
+	v41.inlineContainer = document.getElementById("v45")
+	let v35 = document.getElementById("v35")
+	LinearLayout(v35)
+	v35.Reactive =  {
+		ItemGrow:0,
+		StartGapGrow:1,
+		EndGapGrow:1,
+		PaddingTop:(e)=>(as(e.Parent,"Flipper").Vertical?30:0),
+		PaddingBottom:(e)=>(as(e.Parent,"Flipper").Vertical?30:0),
+		PaddingLeft:20,
+		PaddingRight:20,
+		ForegroundColor:new Color(1,1,1),
+		SecondaryGravity:-1,
+	}
+	let v36 = new AbstractBackground(v35)
+	v36.RawImage = e=>`linear-gradient(${e.Angle||0}turn, #1291B5,#6B00FF)`
+	v35.Modifiers = [v36]
+	v35.ChildrenFirst = v37
+	v37.NextSibling = v39
+	v39.NextSibling = v41
+	let v29 = document.getElementById("v29")
+	Flipper(v29)
+	v29.Reactive =  {
+		Proportion:0.6666,
+		Vertical:(e)=>(e.Width < 1200),
+	}
+	v29.First = v30
+	v29.Second = v35
+	let v48 = document.getElementById("v48")
+	Image(v48)
+	v48.NativeWidth = 2048
+	v48.NativeHeight = 1152
+	v48.content = document.getElementById("v49")
+	let v52 = document.getElementById("v52")
+	Paragraph(v52)
+	v52.Reactive =  {
+		FontSize:(e)=>((e.Root.Width > 1024)?36:24),
+	}
+	v52.inlineContainer = document.getElementById("v53")
+	let v54 = document.getElementById("v54")
+	Paragraph(v54)
+	v54.inlineContainer = document.getElementById("v55")
+	let v50 = document.getElementById("v50")
+	LinearLayout(v50)
+	v50.Reactive =  {
+		ForegroundColor:new Color(1,1,1),
+		PaddingLeft:30,
+		PaddingRight:30,
+		PaddingTop:30,
+		PaddingBottom:30,
+		MarginLeft:0,
+		MarginRight:0,
+		MarginTop:0,
+		MarginBottom:0,
+		PrimaryGravity:1,
+	}
+	let v51 = new AbstractBackground(v50)
+	v51.RawImage = e=>`linear-gradient(${e.Angle||0}turn, #1291B5,#6B00FF)`
+	v50.Modifiers = [v51]
+	v50.ChildrenFirst = v52
+	v52.NextSibling = v54
+	let v47 = document.getElementById("v47")
+	Flipper(v47)
+	v47.Reactive =  {
+		Vertical:(e)=>(e.Width < 1200),
+		MarginLeft:0,
+		MarginRight:0,
+		MarginTop:0,
+		MarginBottom:0,
+		Proportion:0.6,
+	}
+	v47.First = v48
+	v47.Second = v50
+	let v59 = document.getElementById("v59")
+	Image(v59)
+	v59.Reactive =  {
+		Fit:"Outside",
+	}
+	v59.NativeWidth = 2048
+	v59.NativeHeight = 1152
+	v59.content = document.getElementById("v60")
+	let v62 = document.getElementById("v62")
+	Paragraph(v62)
+	v62.Reactive =  {
+		FontSize:(e)=>(e.Root.FontSize * 2),
+		MarginTop:(e)=>(e.Root.FontSize * 2),
+		MarginBottom:(e)=>(e.Root.FontSize * 1),
+	}
+	v62.inlineContainer = document.getElementById("v63")
+	let v64 = document.getElementById("v64")
+	Paragraph(v64)
+	v64.inlineContainer = document.getElementById("v65")
+	let v66 = document.getElementById("v66")
+	Paragraph(v66)
+	v66.Reactive =  {
+		FontSize:20,
+		NoWrap:true,
+		BackgroundColor:(e)=>(as(e,"Hover").Value?new Color(0.724,0.012,0.491):new Color(0.749,0.102,0.537)),
+		PaddingTop:(e)=>(e.FontSize * 0.4),
+		PaddingBottom:(e)=>(e.FontSize * 0.4),
+		PaddingLeft:(e)=>(e.FontSize * 1.2),
+		PaddingRight:(e)=>(e.FontSize * 0.68),
+		MarginTop:(e)=>(e.FontSize * 1),
+	}
+	let v67 = new BorderRadius(v66)
+	v67.Reactive =  {
+		Radius:(e)=>(as(e,"Block").Height * 0.5),
+	}
+	let v68 = new UserSelect(v66)
+	let v69 = new Hover(v66)
+	v66.Modifiers = [v67,v68,v69]
+	let v71 = document.getElementById("v71")
+	SvgIconInline(v71)
+	v71.Parent = v66
+	v66.inlineContainer = document.getElementById("v70")
+	let v61 = document.getElementById("v61")
+	LinearLayout(v61)
+	v61.Reactive =  {
+		MarginLeft:40,
+		MarginRight:40,
+		MarginTop:40,
+		MarginBottom:40,
+		ItemGrow:0,
+		PrimaryGravity:1,
+		SecondaryGravity:-1,
+	}
+	v61.ChildrenFirst = v62
+	v62.NextSibling = v64
+	v64.NextSibling = v66
+	let v56 = document.getElementById("v56")
+	Flipper(v56)
+	v56.Reactive =  {
+		Vertical:(e)=>(e.Width < 1000),
+		ClipChildren:true,
+		PaddingLeft:0,
+		PaddingRight:0,
+		PaddingTop:0,
+		PaddingBottom:0,
+		MarginTop:25,
+		MarginBottom:25,
+		Proportion:0.7,
+		Height:(e)=>Num.Max(e.InternalHeight,(e.Root.Height * 0.35)),
+		Width:1280,
+		MarginLeft:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),Num.PiecewiseLinearInterpolation(e.Root.Width,[1280,30],[480,10])),
+		MarginRight:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),Num.PiecewiseLinearInterpolation(e.Root.Width,[1280,30],[480,10])),
+		Reverse:(e)=>!e.Vertical,
+	}
+	let v57 = new Outline(v56)
+	v57.Reactive =  {
+		Width:2,
+		Color:new Color(0.749,0.102,0.537),
+	}
+	let v58 = new BorderRadius(v56)
+	v58.Reactive =  {
+		Radius:30,
+	}
+	v56.Modifiers = [v57,v58]
+	v56.First = v59
+	v56.Second = v61
+	let v75 = document.getElementById("v75")
+	Image(v75)
+	v75.Reactive =  {
+		Fit:"Outside",
+	}
+	v75.NativeWidth = 2048
+	v75.NativeHeight = 1152
+	v75.content = document.getElementById("v76")
+	let v78 = document.getElementById("v78")
+	Paragraph(v78)
+	v78.Reactive =  {
+		FontSize:(e)=>(e.Root.FontSize * 2),
+		MarginTop:(e)=>(e.Root.FontSize * 2),
+		MarginBottom:(e)=>(e.Root.FontSize * 1),
+	}
+	v78.inlineContainer = document.getElementById("v79")
+	let v80 = document.getElementById("v80")
+	Paragraph(v80)
+	v80.inlineContainer = document.getElementById("v81")
+	let v82 = document.getElementById("v82")
+	Paragraph(v82)
+	v82.Reactive =  {
+		FontSize:20,
+		NoWrap:true,
+		BackgroundColor:(e)=>(as(e,"Hover").Value?new Color(0.362,-0.1,1):new Color(0.42,0,1)),
+		PaddingTop:(e)=>(e.FontSize * 0.4),
+		PaddingBottom:(e)=>(e.FontSize * 0.4),
+		PaddingLeft:(e)=>(e.FontSize * 1.2),
+		PaddingRight:(e)=>(e.FontSize * 0.68),
+		MarginTop:(e)=>(e.FontSize * 1),
+	}
+	let v83 = new BorderRadius(v82)
+	v83.Reactive =  {
+		Radius:(e)=>(as(e,"Block").Height * 0.5),
+	}
+	let v84 = new UserSelect(v82)
+	let v85 = new Hover(v82)
+	v82.Modifiers = [v83,v84,v85]
+	let v87 = document.getElementById("v87")
+	SvgIconInline(v87)
+	v87.Parent = v82
+	v82.inlineContainer = document.getElementById("v86")
+	let v77 = document.getElementById("v77")
+	LinearLayout(v77)
+	v77.Reactive =  {
+		MarginLeft:40,
+		MarginRight:40,
+		MarginTop:40,
+		MarginBottom:40,
+		ItemGrow:0,
+		PrimaryGravity:1,
+		SecondaryGravity:-1,
+	}
+	v77.ChildrenFirst = v78
+	v78.NextSibling = v80
+	v80.NextSibling = v82
+	let v72 = document.getElementById("v72")
+	Flipper(v72)
+	v72.Reactive =  {
+		Vertical:(e)=>(e.Width < 1000),
+		ClipChildren:true,
+		PaddingLeft:0,
+		PaddingRight:0,
+		PaddingTop:0,
+		PaddingBottom:0,
+		MarginTop:25,
+		MarginBottom:25,
+		Proportion:0.7,
+		Height:(e)=>Num.Max(e.InternalHeight,(e.Root.Height * 0.35)),
+		Width:1280,
+		MarginLeft:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),Num.PiecewiseLinearInterpolation(e.Root.Width,[1280,30],[480,10])),
+		MarginRight:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),Num.PiecewiseLinearInterpolation(e.Root.Width,[1280,30],[480,10])),
+		Reverse:(e)=>!e.Vertical,
+	}
+	let v73 = new Outline(v72)
+	v73.Reactive =  {
+		Width:2,
+		Color:new Color(0.42,0,1),
+	}
+	let v74 = new BorderRadius(v72)
+	v74.Reactive =  {
+		Radius:30,
+	}
+	v72.Modifiers = [v73,v74]
+	v72.First = v75
+	v72.Second = v77
+	let v91 = document.getElementById("v91")
+	Image(v91)
+	v91.Reactive =  {
+		Fit:"Outside",
+	}
+	v91.NativeWidth = 2048
+	v91.NativeHeight = 1152
+	v91.content = document.getElementById("v92")
+	let v94 = document.getElementById("v94")
+	Paragraph(v94)
+	v94.Reactive =  {
+		FontSize:(e)=>(e.Root.FontSize * 2),
+		MarginTop:(e)=>(e.Root.FontSize * 2),
+		MarginBottom:(e)=>(e.Root.FontSize * 1),
+	}
+	v94.inlineContainer = document.getElementById("v95")
+	let v96 = document.getElementById("v96")
+	Paragraph(v96)
+	v96.inlineContainer = document.getElementById("v97")
+	let v98 = document.getElementById("v98")
+	Paragraph(v98)
+	v98.Reactive =  {
+		FontSize:20,
+		NoWrap:true,
+		BackgroundColor:(e)=>(as(e,"Hover").Value?new Color(0.362,-0.1,1):new Color(0.42,0,1)),
+		PaddingTop:(e)=>(e.FontSize * 0.4),
+		PaddingBottom:(e)=>(e.FontSize * 0.4),
+		PaddingLeft:(e)=>(e.FontSize * 1.2),
+		PaddingRight:(e)=>(e.FontSize * 0.68),
+		MarginTop:(e)=>(e.FontSize * 1),
+	}
+	let v99 = new BorderRadius(v98)
+	v99.Reactive =  {
+		Radius:(e)=>(as(e,"Block").Height * 0.5),
+	}
+	let v100 = new UserSelect(v98)
+	let v101 = new Hover(v98)
+	v98.Modifiers = [v99,v100,v101]
+	let v103 = document.getElementById("v103")
+	SvgIconInline(v103)
+	v103.Parent = v98
+	v98.inlineContainer = document.getElementById("v102")
+	let v93 = document.getElementById("v93")
+	LinearLayout(v93)
+	v93.Reactive =  {
+		MarginLeft:40,
+		MarginRight:40,
+		MarginTop:40,
+		MarginBottom:40,
+		ItemGrow:0,
+		PrimaryGravity:1,
+		SecondaryGravity:-1,
+	}
+	v93.ChildrenFirst = v94
+	v94.NextSibling = v96
+	v96.NextSibling = v98
+	let v88 = document.getElementById("v88")
+	Flipper(v88)
+	v88.Reactive =  {
+		Vertical:(e)=>(e.Width < 1000),
+		ClipChildren:true,
+		PaddingLeft:0,
+		PaddingRight:0,
+		PaddingTop:0,
+		PaddingBottom:0,
+		MarginTop:25,
+		MarginBottom:25,
+		Proportion:0.7,
+		Height:(e)=>Num.Max(e.InternalHeight,(e.Root.Height * 0.35)),
+		Width:1280,
+		MarginLeft:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),Num.PiecewiseLinearInterpolation(e.Root.Width,[1280,30],[480,10])),
+		MarginRight:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),Num.PiecewiseLinearInterpolation(e.Root.Width,[1280,30],[480,10])),
+	}
+	let v89 = new Outline(v88)
+	v89.Reactive =  {
+		Width:2,
+		Color:new Color(0.42,0,1),
+	}
+	let v90 = new BorderRadius(v88)
+	v90.Reactive =  {
+		Radius:30,
+	}
+	v88.Modifiers = [v89,v90]
+	v88.First = v91
+	v88.Second = v93
+	let v107 = document.getElementById("v107")
+	Image(v107)
+	v107.Reactive =  {
+		Fit:"Outside",
+	}
+	v107.NativeWidth = 2048
+	v107.NativeHeight = 1152
+	v107.content = document.getElementById("v108")
+	let v110 = document.getElementById("v110")
+	Paragraph(v110)
+	v110.Reactive =  {
+		FontSize:(e)=>(e.Root.FontSize * 2),
+		MarginTop:(e)=>(e.Root.FontSize * 2),
+		MarginBottom:(e)=>(e.Root.FontSize * 1),
+	}
+	v110.inlineContainer = document.getElementById("v111")
+	let v112 = document.getElementById("v112")
+	Paragraph(v112)
+	v112.inlineContainer = document.getElementById("v113")
+	let v114 = document.getElementById("v114")
+	Paragraph(v114)
+	v114.Reactive =  {
+		FontSize:20,
+		NoWrap:true,
+		BackgroundColor:(e)=>(as(e,"Hover").Value?new Color(0.362,-0.1,1):new Color(0.42,0,1)),
+		PaddingTop:(e)=>(e.FontSize * 0.4),
+		PaddingBottom:(e)=>(e.FontSize * 0.4),
+		PaddingLeft:(e)=>(e.FontSize * 1.2),
+		PaddingRight:(e)=>(e.FontSize * 0.68),
+		MarginTop:(e)=>(e.FontSize * 1),
+	}
+	let v115 = new BorderRadius(v114)
+	v115.Reactive =  {
+		Radius:(e)=>(as(e,"Block").Height * 0.5),
+	}
+	let v116 = new UserSelect(v114)
+	let v117 = new Hover(v114)
+	v114.Modifiers = [v115,v116,v117]
+	let v119 = document.getElementById("v119")
+	SvgIconInline(v119)
+	v119.Parent = v114
+	v114.inlineContainer = document.getElementById("v118")
+	let v109 = document.getElementById("v109")
+	LinearLayout(v109)
+	v109.Reactive =  {
+		MarginLeft:40,
+		MarginRight:40,
+		MarginTop:40,
+		MarginBottom:40,
+		ItemGrow:0,
+		PrimaryGravity:1,
+		SecondaryGravity:-1,
+	}
+	v109.ChildrenFirst = v110
+	v110.NextSibling = v112
+	v112.NextSibling = v114
+	let v104 = document.getElementById("v104")
+	Flipper(v104)
+	v104.Reactive =  {
+		Vertical:(e)=>(e.Width < 1000),
+		ClipChildren:true,
+		PaddingLeft:0,
+		PaddingRight:0,
+		PaddingTop:0,
+		PaddingBottom:0,
+		MarginTop:25,
+		MarginBottom:25,
+		Proportion:0.7,
+		Height:(e)=>Num.Max(e.InternalHeight,(e.Root.Height * 0.35)),
+		Width:1280,
+		MarginLeft:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),Num.PiecewiseLinearInterpolation(e.Root.Width,[1280,30],[480,10])),
+		MarginRight:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),Num.PiecewiseLinearInterpolation(e.Root.Width,[1280,30],[480,10])),
+		Reverse:(e)=>!e.Vertical,
+	}
+	let v105 = new Outline(v104)
+	v105.Reactive =  {
+		Width:2,
+		Color:new Color(0.42,0,1),
+	}
+	let v106 = new BorderRadius(v104)
+	v106.Reactive =  {
+		Radius:30,
+	}
+	v104.Modifiers = [v105,v106]
+	v104.First = v107
+	v104.Second = v109
+	let v123 = document.getElementById("v123")
+	Image(v123)
+	v123.Reactive =  {
+		Fit:"Outside",
+	}
+	v123.NativeWidth = 2048
+	v123.NativeHeight = 1152
+	v123.content = document.getElementById("v124")
+	let v126 = document.getElementById("v126")
+	Paragraph(v126)
+	v126.Reactive =  {
+		FontSize:(e)=>(e.Root.FontSize * 2),
+		MarginTop:(e)=>(e.Root.FontSize * 2),
+		MarginBottom:(e)=>(e.Root.FontSize * 1),
+	}
+	v126.inlineContainer = document.getElementById("v127")
+	let v128 = document.getElementById("v128")
+	Paragraph(v128)
+	v128.inlineContainer = document.getElementById("v129")
+	let v130 = document.getElementById("v130")
+	Paragraph(v130)
+	v130.Reactive =  {
+		FontSize:20,
+		NoWrap:true,
+		BackgroundColor:(e)=>(as(e,"Hover").Value?new Color(0.362,-0.1,1):new Color(0.42,0,1)),
+		PaddingTop:(e)=>(e.FontSize * 0.4),
+		PaddingBottom:(e)=>(e.FontSize * 0.4),
+		PaddingLeft:(e)=>(e.FontSize * 1.2),
+		PaddingRight:(e)=>(e.FontSize * 0.68),
+		MarginTop:(e)=>(e.FontSize * 1),
+	}
+	let v131 = new BorderRadius(v130)
+	v131.Reactive =  {
+		Radius:(e)=>(as(e,"Block").Height * 0.5),
+	}
+	let v132 = new UserSelect(v130)
+	let v133 = new Hover(v130)
+	v130.Modifiers = [v131,v132,v133]
+	let v135 = document.getElementById("v135")
+	SvgIconInline(v135)
+	v135.Parent = v130
+	v130.inlineContainer = document.getElementById("v134")
+	let v125 = document.getElementById("v125")
+	LinearLayout(v125)
+	v125.Reactive =  {
+		MarginLeft:40,
+		MarginRight:40,
+		MarginTop:40,
+		MarginBottom:40,
+		ItemGrow:0,
+		PrimaryGravity:1,
+		SecondaryGravity:-1,
+	}
+	v125.ChildrenFirst = v126
+	v126.NextSibling = v128
+	v128.NextSibling = v130
+	let v120 = document.getElementById("v120")
+	Flipper(v120)
+	v120.Reactive =  {
+		Vertical:(e)=>(e.Width < 1000),
+		ClipChildren:true,
+		PaddingLeft:0,
+		PaddingRight:0,
+		PaddingTop:0,
+		PaddingBottom:0,
+		MarginTop:25,
+		MarginBottom:25,
+		Proportion:0.7,
+		Height:(e)=>Num.Max(e.InternalHeight,(e.Root.Height * 0.35)),
+		Width:1280,
+		MarginLeft:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),Num.PiecewiseLinearInterpolation(e.Root.Width,[1280,30],[480,10])),
+		MarginRight:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),Num.PiecewiseLinearInterpolation(e.Root.Width,[1280,30],[480,10])),
+	}
+	let v121 = new Outline(v120)
+	v121.Reactive =  {
+		Width:2,
+		Color:new Color(0.42,0,1),
+	}
+	let v122 = new BorderRadius(v120)
+	v122.Reactive =  {
+		Radius:30,
+	}
+	v120.Modifiers = [v121,v122]
+	v120.First = v123
+	v120.Second = v125
+	let v139 = document.getElementById("v139")
+	Image(v139)
+	v139.Reactive =  {
+		Fit:"Outside",
+	}
+	v139.NativeWidth = 2048
+	v139.NativeHeight = 1152
+	v139.content = document.getElementById("v140")
+	let v142 = document.getElementById("v142")
+	Paragraph(v142)
+	v142.Reactive =  {
+		FontSize:(e)=>(e.Root.FontSize * 2),
+		MarginTop:(e)=>(e.Root.FontSize * 2),
+		MarginBottom:(e)=>(e.Root.FontSize * 1),
+	}
+	v142.inlineContainer = document.getElementById("v143")
+	let v144 = document.getElementById("v144")
+	Paragraph(v144)
+	v144.inlineContainer = document.getElementById("v145")
+	let v146 = document.getElementById("v146")
+	Paragraph(v146)
+	v146.Reactive =  {
+		FontSize:20,
+		NoWrap:true,
+		BackgroundColor:(e)=>(as(e,"Hover").Value?new Color(0.362,-0.1,1):new Color(0.42,0,1)),
+		PaddingTop:(e)=>(e.FontSize * 0.4),
+		PaddingBottom:(e)=>(e.FontSize * 0.4),
+		PaddingLeft:(e)=>(e.FontSize * 1.2),
+		PaddingRight:(e)=>(e.FontSize * 0.68),
+		MarginTop:(e)=>(e.FontSize * 1),
+	}
+	let v147 = new BorderRadius(v146)
+	v147.Reactive =  {
+		Radius:(e)=>(as(e,"Block").Height * 0.5),
+	}
+	let v148 = new UserSelect(v146)
+	let v149 = new Hover(v146)
+	v146.Modifiers = [v147,v148,v149]
+	let v151 = document.getElementById("v151")
+	SvgIconInline(v151)
+	v151.Parent = v146
+	v146.inlineContainer = document.getElementById("v150")
+	let v141 = document.getElementById("v141")
+	LinearLayout(v141)
+	v141.Reactive =  {
+		MarginLeft:40,
+		MarginRight:40,
+		MarginTop:40,
+		MarginBottom:40,
+		ItemGrow:0,
+		PrimaryGravity:1,
+		SecondaryGravity:-1,
+	}
+	v141.ChildrenFirst = v142
+	v142.NextSibling = v144
+	v144.NextSibling = v146
+	let v136 = document.getElementById("v136")
+	Flipper(v136)
+	v136.Reactive =  {
+		Vertical:(e)=>(e.Width < 1000),
+		ClipChildren:true,
+		PaddingLeft:0,
+		PaddingRight:0,
+		PaddingTop:0,
+		PaddingBottom:0,
+		MarginTop:25,
+		MarginBottom:25,
+		Proportion:0.7,
+		Height:(e)=>Num.Max(e.InternalHeight,(e.Root.Height * 0.35)),
+		Width:1280,
+		MarginLeft:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),Num.PiecewiseLinearInterpolation(e.Root.Width,[1280,30],[480,10])),
+		MarginRight:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),Num.PiecewiseLinearInterpolation(e.Root.Width,[1280,30],[480,10])),
+		Reverse:(e)=>!e.Vertical,
+	}
+	let v137 = new Outline(v136)
+	v137.Reactive =  {
+		Width:2,
+		Color:new Color(0.42,0,1),
+	}
+	let v138 = new BorderRadius(v136)
+	v138.Reactive =  {
+		Radius:30,
+	}
+	v136.Modifiers = [v137,v138]
+	v136.First = v139
+	v136.Second = v141
+	let v155 = document.getElementById("v155")
+	Image(v155)
+	v155.Reactive =  {
+		Fit:"Outside",
+	}
+	v155.NativeWidth = 2048
+	v155.NativeHeight = 1152
+	v155.content = document.getElementById("v156")
+	let v158 = document.getElementById("v158")
+	Paragraph(v158)
+	v158.Reactive =  {
+		FontSize:(e)=>(e.Root.FontSize * 2),
+		MarginTop:(e)=>(e.Root.FontSize * 2),
+		MarginBottom:(e)=>(e.Root.FontSize * 1),
+	}
+	v158.inlineContainer = document.getElementById("v159")
+	let v160 = document.getElementById("v160")
+	Paragraph(v160)
+	v160.inlineContainer = document.getElementById("v161")
+	let v162 = document.getElementById("v162")
+	Paragraph(v162)
+	v162.Reactive =  {
+		FontSize:20,
+		NoWrap:true,
+		BackgroundColor:(e)=>(as(e,"Hover").Value?new Color(0.362,-0.1,1):new Color(0.42,0,1)),
+		PaddingTop:(e)=>(e.FontSize * 0.4),
+		PaddingBottom:(e)=>(e.FontSize * 0.4),
+		PaddingLeft:(e)=>(e.FontSize * 1.2),
+		PaddingRight:(e)=>(e.FontSize * 0.68),
+		MarginTop:(e)=>(e.FontSize * 1),
+	}
+	let v163 = new BorderRadius(v162)
+	v163.Reactive =  {
+		Radius:(e)=>(as(e,"Block").Height * 0.5),
+	}
+	let v164 = new UserSelect(v162)
+	let v165 = new Hover(v162)
+	v162.Modifiers = [v163,v164,v165]
+	let v167 = document.getElementById("v167")
+	SvgIconInline(v167)
+	v167.Parent = v162
+	v162.inlineContainer = document.getElementById("v166")
+	let v157 = document.getElementById("v157")
+	LinearLayout(v157)
+	v157.Reactive =  {
+		MarginLeft:40,
+		MarginRight:40,
+		MarginTop:40,
+		MarginBottom:40,
+		ItemGrow:0,
+		PrimaryGravity:1,
+		SecondaryGravity:-1,
+	}
+	v157.ChildrenFirst = v158
+	v158.NextSibling = v160
+	v160.NextSibling = v162
+	let v152 = document.getElementById("v152")
+	Flipper(v152)
+	v152.Reactive =  {
+		Vertical:(e)=>(e.Width < 1000),
+		ClipChildren:true,
+		PaddingLeft:0,
+		PaddingRight:0,
+		PaddingTop:0,
+		PaddingBottom:0,
+		MarginTop:25,
+		MarginBottom:25,
+		Proportion:0.7,
+		Height:(e)=>Num.Max(e.InternalHeight,(e.Root.Height * 0.35)),
+		Width:1280,
+		MarginLeft:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),Num.PiecewiseLinearInterpolation(e.Root.Width,[1280,30],[480,10])),
+		MarginRight:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),Num.PiecewiseLinearInterpolation(e.Root.Width,[1280,30],[480,10])),
+	}
+	let v153 = new Outline(v152)
+	v153.Reactive =  {
+		Width:2,
+		Color:new Color(0.42,0,1),
+	}
+	let v154 = new BorderRadius(v152)
+	v154.Reactive =  {
+		Radius:30,
+	}
+	v152.Modifiers = [v153,v154]
+	v152.First = v155
+	v152.Second = v157
+	let v168 = document.getElementById("v168")
+	Paragraph(v168)
+	v168.Reactive =  {
+		FontSize:(e)=>((e.Root.Width > 1024)?36:24),
+	}
+	v168.inlineContainer = document.getElementById("v169")
+	let v4 = document.getElementById("v4")
+	LinearLayout(v4)
+	v4.ChildrenFirst = v5
+	v5.NextSibling = v21
+	v21.NextSibling = v24
+	v24.NextSibling = v29
+	v29.NextSibling = v47
+	v47.NextSibling = v56
+	v56.NextSibling = v72
+	v72.NextSibling = v88
+	v88.NextSibling = v104
+	v104.NextSibling = v120
+	v120.NextSibling = v136
+	v136.NextSibling = v152
+	v152.NextSibling = v168
+	let v171 = document.getElementById("v171")
+	Paragraph(v171)
+	let v173 = document.getElementById("v173")
+	AbstractInline(v173)
+	v173.Parent = v171
+	v171.inlineContainer = document.getElementById("v172")
+	let v170 = document.getElementById("v170")
+	LinearLayout(v170)
+	v170.Reactive =  {
+		FontSize:14,
+		BackgroundColor:new Color(0.9,0.9,0.9),
+		PaddingLeft:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),0),
+		PaddingRight:(e)=>Num.Max(((e.Parent.Width - 1280) * 0.5),0),
+	}
+	v170.ChildrenFirst = v171
+	let v3 = document.getElementById("v3")
+	LinearLayout(v3)
+	v3.Reactive =  {
+		Width:(e)=>e.Parent.Width,
+		ItemGrow:0,
+		GapGrow:1,
+		Gap:0,
+	}
+	v3.ChildrenFirst = v4
+	v4.NextSibling = v170
+	let v1 = document.getElementById("v1")
+	ScrollView(v1)
+	v1.Reactive =  {
+		Width:(e)=>e.Parent.Width,
+		Height:(e)=>e.Parent.Height,
+		ScrollY:(e)=>_0A147F13.StoredValue,
+	}
+	let v2 = new SessionStorage(v1)
+	let _0A147F13 = v2
+	v2.Reactive =  {
+		ValueToStore:(e)=>as(e,"ScrollView").ScrollY,
+	}
+	v2.name = "MainScroll_"
+	v2.StoredValue = Number(sessionStorage.getItem("MainScroll_") || 0) || 0
+	v1.Modifiers = [v2]
+	v1.Child = v3
+	let v0 = document.getElementById("v0")
+	Page(v0)
+	v0.Reactive =  {
+		FontSize:18,
+	}
+	v0.UnmanagedChildrenFirst = v1
+	v0.svgDefs = document.getElementById("v174")
+	v0.extras = document.getElementById("extras")
+}
+</script></head><body id="v0" style="font-family:Inter;font-weight:400;"><scroll-view id="v1"><linear-layout id="v3"><linear-layout id="v4"><flipper id="v5"><linear-layout id="v6"><fit-view id="v7"><linear-layout id="v8"><image-block id="v9"><content id="v10"><img width="100%" height="100%" src="data:image/svg+xml;utf8,<?xml version='1.0' encoding='utf-16'?><!-- Generator: Adobe Illustrator 26.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  --><svg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 723 128' style='enable-background:new 0 0 723 128;' xml:space='preserve'>
+<style type='text/css'>
+	.st0{fill:url(%23SVGID_1_);}
+	.st1{fill:url(%23SVGID_00000064354162319728190620000016799216857779456149_);}
+</style>
+<g>
+	
+		<linearGradient id='SVGID_1_' gradientUnits='userSpaceOnUse' x1='0' y1='56.5479' x2='222.2658' y2='56.5479' gradientTransform='matrix(1 0 0 -1 0 128)'>
+		<stop offset='0' style='stop-color:%2337388D' />
+		<stop offset='1' style='stop-color:%23BC2585' />
+	</linearGradient>
+	<polygon class='st0' points='112.2,96.4 112.2,128 224.4,64 140.3,14.9 112.2,30.7 112.2,64 140.3,79.8  ' />
+	
+		<linearGradient id='SVGID_00000088811743480941228720000009919488891942511520_' gradientUnits='userSpaceOnUse' x1='0' y1='64.4384' x2='222.2658' y2='64.4384' gradientTransform='matrix(1 0 0 -1 0 128)'>
+		<stop offset='0' style='stop-color:%2337388D' />
+		<stop offset='1' style='stop-color:%23BC2585' />
+	</linearGradient>
+	<polygon style='fill:url(%23SVGID_00000088811743480941228720000009919488891942511520_);' points='84.2,112.2 84.2,79.8 112.2,64    84.2,47.3 84.2,14.9 0,64  ' />
+</g>
+<g>
+	<path d='M252.5,31.6H263v63.1h-10.5V31.6z' />
+	<path d='M280.5,31.6h10.5v52.6h28.1v10.5h-38.6V31.6z' />
+	<path d='M327.9,31.6h10.5v52.6h28.1v10.5h-38.6V31.6z' />
+	<path d='M441.9,31.6h11L474.3,61l20.3-29.5H505v63.1h-10.5V49.2l-20.2,28h-1.7l-20.3-27.7v45.2h-10.5V31.6z' />
+	<path d='M520.8,31.6h36.8v10.5h-26.3v15.8h22.8v10.5h-22.8v15.8h26.3v10.5h-36.8V31.6z' />
+	<path d='M562.8,31.6h52.6v10.5h-21v52.6h-10.5V42.1h-21V31.6z' />
+	<path d='M701.4,68.4v26.3h-10.5V68.4l-21.1-36.8h12L696.6,58l14.6-26.4h11.4L701.4,68.4z' />
+	<path d='M415.6,31.6V71c0,8.2-6.7,14.9-14.9,14.9s-14.9-6.7-14.9-14.9V31.6h-10.5V71c0,14,11.4,25.4,25.4,25.4S426.1,85,426.1,71   V31.6H415.6z' />
+	<path d='M654.8,69c5.9-3.5,9.7-9.9,9.7-17.3c0-11.1-9-20.2-20.2-20.2h-21.9v63.1H633V71.9h11.4l13.2,22.8h12.1L654.8,69z    M644.4,61.4H633V42.1c0,0,9.3,0,11.4,0c5.3,0,9.6,4.3,9.6,9.6S649.7,61.4,644.4,61.4z' />
+</g>
+</svg>"></content></image-block><paragraph id="v11" style="font-weight:500;"><p id="v13" class="inline-container" style="letter-spacing:0em;"><inline id="v14" style="margin:0.5em 0.5em 0.5em 0.5em;">CONTACT US</inline><svg-icon-inline id="v15" style="margin:0em 0.4em 0em 0em;display:inline-block;width:1em;height:1em;transform:scale(1,1) translate(0, 14.000000000000002%);transform-origin:bottom;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24" style="display:block;position:relative;transform:scale(1, 1);transform-origin:top;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24"><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg></svg></svg-icon-inline></p></paragraph></linear-layout></fit-view><paragraph id="v16" style="line-height:1.2;"><p id="v17" class="inline-container" style="letter-spacing:0em;">HOLOGRAPHIC
+<inline id="v18">DISPLAY</inline>
+FOR XR
+EXPERIENCE</p></paragraph></linear-layout><image-block id="v19"><content id="v20"><svg id="thumbnail" width="100%" height="100%" viewBox="0 0 32 32" preserveAspectRatio="none"><use href="#1E34B7896E9EC760"></use><use href="#1E34B7896E9EC760" filter="url(#A65402ECAD179F53)"></use><g filter="url(#A8D38B2D8722AFE8)"><use href="#1E34B7896E9EC760"></use><use href="#1E34B7896E9EC760" filter="url(#A65402ECAD179F53)"></use></g></svg><img width="100%" height="100%" src="Assets/0AA99E00D727B2C0C140E3A1B811C23D.png"></content></image-block></flipper><block id="v21"></block><grid-layout id="v24"><image-block id="v25"><content id="v26"><svg id="thumbnail" width="100%" height="100%" viewBox="0 0 32 24" preserveAspectRatio="none"><use href="#BE9763960FBF3671"></use><use href="#BE9763960FBF3671" filter="url(#A65402ECAD179F53)"></use><g filter="url(#A8D38B2D8722AFE8)"><use href="#BE9763960FBF3671"></use><use href="#BE9763960FBF3671" filter="url(#A65402ECAD179F53)"></use></g></svg><img width="100%" height="100%" src="Assets/22BAE975DA68B14DE94AE85F5D35EAD8.jpg"></content></image-block><image-block id="v27"><content id="v28"><svg id="thumbnail" width="100%" height="100%" viewBox="0 0 32 24" preserveAspectRatio="none"><use href="#74D22433F8C80B0E"></use><use href="#74D22433F8C80B0E" filter="url(#A65402ECAD179F53)"></use><g filter="url(#A8D38B2D8722AFE8)"><use href="#74D22433F8C80B0E"></use><use href="#74D22433F8C80B0E" filter="url(#A65402ECAD179F53)"></use></g></svg><img width="100%" height="100%" src="Assets/FF10170E9203348B9E3525EF0B02097B.jpg"></content></image-block></grid-layout><flipper id="v29"><flipper id="v30"><image-block id="v31"><content id="v32"><svg id="thumbnail" width="100%" height="100%" viewBox="0 0 32 24" preserveAspectRatio="none"><use href="#BE9763960FBF3671"></use><use href="#BE9763960FBF3671" filter="url(#A65402ECAD179F53)"></use><g filter="url(#A8D38B2D8722AFE8)"><use href="#BE9763960FBF3671"></use><use href="#BE9763960FBF3671" filter="url(#A65402ECAD179F53)"></use></g></svg><img width="100%" height="100%" src="Assets/22BAE975DA68B14DE94AE85F5D35EAD8.jpg"></content></image-block><image-block id="v33"><content id="v34"><svg id="thumbnail" width="100%" height="100%" viewBox="0 0 32 24" preserveAspectRatio="none"><use href="#74D22433F8C80B0E"></use><use href="#74D22433F8C80B0E" filter="url(#A65402ECAD179F53)"></use><g filter="url(#A8D38B2D8722AFE8)"><use href="#74D22433F8C80B0E"></use><use href="#74D22433F8C80B0E" filter="url(#A65402ECAD179F53)"></use></g></svg><img width="100%" height="100%" src="Assets/FF10170E9203348B9E3525EF0B02097B.jpg"></content></image-block></flipper><linear-layout id="v35"><paragraph id="v37" style="line-height:1.3;font-weight:500;"><p id="v38" class="inline-container" style="letter-spacing:0em;">HOW IT WORKS</p></paragraph><paragraph id="v39"><p id="v40" class="inline-container" style="letter-spacing:0em;">The set of technologies based on the MotionlParallax3D principle. True-to-life and unique extended reality experience ever.</p></paragraph><paragraph id="v41" style="font-weight:500;"><p id="v45" class="inline-container" style="letter-spacing:0em;">Learn more <svg-icon-inline id="v46" style="display:inline-block;width:1em;height:1em;transform:scale(1,1) translate(0, 14.000000000000002%);transform-origin:bottom;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24" style="display:block;position:relative;transform:scale(1, 1);transform-origin:top;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24"><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg></svg></svg-icon-inline></p></paragraph></linear-layout></flipper><flipper id="v47"><image-block id="v48"><content id="v49"><svg id="thumbnail" width="100%" height="100%" viewBox="0 0 32 18" preserveAspectRatio="none"><use href="#F5581BCED8FD2742"></use><use href="#F5581BCED8FD2742" filter="url(#A65402ECAD179F53)"></use><g filter="url(#A8D38B2D8722AFE8)"><use href="#F5581BCED8FD2742"></use><use href="#F5581BCED8FD2742" filter="url(#A65402ECAD179F53)"></use></g></svg><img width="100%" height="100%" src="Assets/042757867F2EE4222D3EE3E152FAA60D.jpg"></content></image-block><linear-layout id="v50"><paragraph id="v52" style="line-height:1.3;font-weight:500;"><p id="v53" class="inline-container" style="letter-spacing:0em;">MEET ILLUMETRY</p></paragraph><paragraph id="v54"><p id="v55" class="inline-container" style="letter-spacing:0em;">The set of technologies based on the MotionlParallax3D principle. 
+True-to-life and unique extended reality experience ever.</p></paragraph></linear-layout></flipper><flipper id="v56"><image-block id="v59"><content id="v60"><svg id="thumbnail" width="100%" height="100%" viewBox="0 0 32 18" preserveAspectRatio="none"><use href="#F9AAB33BBEC3198A"></use><use href="#F9AAB33BBEC3198A" filter="url(#A65402ECAD179F53)"></use><g filter="url(#A8D38B2D8722AFE8)"><use href="#F9AAB33BBEC3198A"></use><use href="#F9AAB33BBEC3198A" filter="url(#A65402ECAD179F53)"></use></g></svg><img width="100%" height="100%" src="Assets/5D62D01FEAB370647191354E329E1B86.jpg"></content></image-block><linear-layout id="v61"><paragraph id="v62" style="line-height:1.2;font-family:Montserrat;font-weight:500;"><p id="v63" class="inline-container" style="letter-spacing:0em;">Meet Illumetry</p></paragraph><paragraph id="v64"><p id="v65" class="inline-container" style="letter-spacing:0em;">The set of technologies based on the MotionlParallax3D principle. 
+True-to-life and unique extended reality experience ever.                </p></paragraph><paragraph id="v66" style="font-weight:500;"><p id="v70" class="inline-container" style="letter-spacing:0em;">Learn more <svg-icon-inline id="v71" style="display:inline-block;width:1em;height:1em;transform:scale(1,1) translate(0, 14.000000000000002%);transform-origin:bottom;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24" style="display:block;position:relative;transform:scale(1, 1);transform-origin:top;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24"><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg></svg></svg-icon-inline></p></paragraph></linear-layout></flipper><flipper id="v72"><image-block id="v75"><content id="v76"><svg id="thumbnail" width="100%" height="100%" viewBox="0 0 32 18" preserveAspectRatio="none"><use href="#C504CB8D5CCECF18"></use><use href="#C504CB8D5CCECF18" filter="url(#A65402ECAD179F53)"></use><g filter="url(#A8D38B2D8722AFE8)"><use href="#C504CB8D5CCECF18"></use><use href="#C504CB8D5CCECF18" filter="url(#A65402ECAD179F53)"></use></g></svg><img width="100%" height="100%" src="Assets/10FD4C19B893915ECA2AC02649E7D8F2.jpg"></content></image-block><linear-layout id="v77"><paragraph id="v78" style="line-height:1.2;font-family:Montserrat;font-weight:500;"><p id="v79" class="inline-container" style="letter-spacing:0em;">XR for K-12</p></paragraph><paragraph id="v80"><p id="v81" class="inline-container" style="letter-spacing:0em;">Children are fully engaged with the virtual content while keeping in contact with a tutor</p></paragraph><paragraph id="v82" style="font-weight:500;"><p id="v86" class="inline-container" style="letter-spacing:0em;">Sounds fantastic, want to know more. <svg-icon-inline id="v87" style="display:inline-block;width:1em;height:1em;transform:scale(1,1) translate(0, 14.000000000000002%);transform-origin:bottom;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24" style="display:block;position:relative;transform:scale(1, 1);transform-origin:top;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24"><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg></svg></svg-icon-inline></p></paragraph></linear-layout></flipper><flipper id="v88"><image-block id="v91"><content id="v92"><svg id="thumbnail" width="100%" height="100%" viewBox="0 0 32 18" preserveAspectRatio="none"><use href="#030B0A83BFC745BD"></use><use href="#030B0A83BFC745BD" filter="url(#A65402ECAD179F53)"></use><g filter="url(#A8D38B2D8722AFE8)"><use href="#030B0A83BFC745BD"></use><use href="#030B0A83BFC745BD" filter="url(#A65402ECAD179F53)"></use></g></svg><img width="100%" height="100%" src="Assets/07D14BB4AC4ED218AD1B6FBA8CD25908.jpg"></content></image-block><linear-layout id="v93"><paragraph id="v94" style="line-height:1.2;font-family:Montserrat;font-weight:500;"><p id="v95" class="inline-container" style="letter-spacing:0em;">XR for vocational training</p></paragraph><paragraph id="v96"><p id="v97" class="inline-container" style="letter-spacing:0em;">Safe time and resources to enhance the process of onboarding and staff skills upgrading</p></paragraph><paragraph id="v98" style="font-weight:500;"><p id="v102" class="inline-container" style="letter-spacing:0em;">How? <svg-icon-inline id="v103" style="display:inline-block;width:1em;height:1em;transform:scale(1,1) translate(0, 14.000000000000002%);transform-origin:bottom;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24" style="display:block;position:relative;transform:scale(1, 1);transform-origin:top;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24"><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg></svg></svg-icon-inline></p></paragraph></linear-layout></flipper><flipper id="v104"><image-block id="v107"><content id="v108"><svg id="thumbnail" width="100%" height="100%" viewBox="0 0 32 18" preserveAspectRatio="none"><use href="#F9AAB33BBEC3198A"></use><use href="#F9AAB33BBEC3198A" filter="url(#A65402ECAD179F53)"></use><g filter="url(#A8D38B2D8722AFE8)"><use href="#F9AAB33BBEC3198A"></use><use href="#F9AAB33BBEC3198A" filter="url(#A65402ECAD179F53)"></use></g></svg><img width="100%" height="100%" src="Assets/5D62D01FEAB370647191354E329E1B86.jpg"></content></image-block><linear-layout id="v109"><paragraph id="v110" style="line-height:1.2;font-family:Montserrat;font-weight:500;"><p id="v111" class="inline-container" style="letter-spacing:0em;">XR for medical education</p></paragraph><paragraph id="v112"><p id="v113" class="inline-container" style="letter-spacing:0em;">Solutions for inspired physicians and healthcare pros to gain practical knowledge via precise medical virtual holograms</p></paragraph><paragraph id="v114" style="font-weight:500;"><p id="v118" class="inline-container" style="letter-spacing:0em;">Ready to dive deeper <svg-icon-inline id="v119" style="display:inline-block;width:1em;height:1em;transform:scale(1,1) translate(0, 14.000000000000002%);transform-origin:bottom;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24" style="display:block;position:relative;transform:scale(1, 1);transform-origin:top;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24"><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg></svg></svg-icon-inline></p></paragraph></linear-layout></flipper><flipper id="v120"><image-block id="v123"><content id="v124"><svg id="thumbnail" width="100%" height="100%" viewBox="0 0 32 18" preserveAspectRatio="none"><use href="#907431284F4E0788"></use><use href="#907431284F4E0788" filter="url(#A65402ECAD179F53)"></use><g filter="url(#A8D38B2D8722AFE8)"><use href="#907431284F4E0788"></use><use href="#907431284F4E0788" filter="url(#A65402ECAD179F53)"></use></g></svg><img width="100%" height="100%" src="Assets/5B36CC2EBAD61BC4188D143F8B5D2236.jpg"></content></image-block><linear-layout id="v125"><paragraph id="v126" style="line-height:1.2;font-family:Montserrat;font-weight:500;"><p id="v127" class="inline-container" style="letter-spacing:0em;">XR for scientific studies</p></paragraph><paragraph id="v128"><p id="v129" class="inline-container" style="letter-spacing:0em;">Complex data sets are presented as volumetric interactive objects that simplify the investigation process</p></paragraph><paragraph id="v130" style="font-weight:500;"><p id="v134" class="inline-container" style="letter-spacing:0em;">Discover the solutions <svg-icon-inline id="v135" style="display:inline-block;width:1em;height:1em;transform:scale(1,1) translate(0, 14.000000000000002%);transform-origin:bottom;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24" style="display:block;position:relative;transform:scale(1, 1);transform-origin:top;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24"><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg></svg></svg-icon-inline></p></paragraph></linear-layout></flipper><flipper id="v136"><image-block id="v139"><content id="v140"><svg id="thumbnail" width="100%" height="100%" viewBox="0 0 32 18" preserveAspectRatio="none"><use href="#54AE10203658D396"></use><use href="#54AE10203658D396" filter="url(#A65402ECAD179F53)"></use><g filter="url(#A8D38B2D8722AFE8)"><use href="#54AE10203658D396"></use><use href="#54AE10203658D396" filter="url(#A65402ECAD179F53)"></use></g></svg><img width="100%" height="100%" src="Assets/DF067680798B2BD0F2A802E86E15AB4F.jpg"></content></image-block><linear-layout id="v141"><paragraph id="v142" style="line-height:1.2;font-family:Montserrat;font-weight:500;"><p id="v143" class="inline-container" style="letter-spacing:0em;">XR for creating</p></paragraph><paragraph id="v144"><p id="v145" class="inline-container" style="letter-spacing:0em;">Next-gen tool for digital artists for designing, sculpting, and modeling in a user-friendly 3D space</p></paragraph><paragraph id="v146" style="font-weight:500;"><p id="v150" class="inline-container" style="letter-spacing:0em;">How can I use it? <svg-icon-inline id="v151" style="display:inline-block;width:1em;height:1em;transform:scale(1,1) translate(0, 14.000000000000002%);transform-origin:bottom;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24" style="display:block;position:relative;transform:scale(1, 1);transform-origin:top;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24"><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg></svg></svg-icon-inline></p></paragraph></linear-layout></flipper><flipper id="v152"><image-block id="v155"><content id="v156"><svg id="thumbnail" width="100%" height="100%" viewBox="0 0 32 18" preserveAspectRatio="none"><use href="#F9AAB33BBEC3198A"></use><use href="#F9AAB33BBEC3198A" filter="url(#A65402ECAD179F53)"></use><g filter="url(#A8D38B2D8722AFE8)"><use href="#F9AAB33BBEC3198A"></use><use href="#F9AAB33BBEC3198A" filter="url(#A65402ECAD179F53)"></use></g></svg><img width="100%" height="100%" src="Assets/5D62D01FEAB370647191354E329E1B86.jpg"></content></image-block><linear-layout id="v157"><paragraph id="v158" style="line-height:1.2;font-family:Montserrat;font-weight:500;"><p id="v159" class="inline-container" style="letter-spacing:0em;">XR for entertainment</p></paragraph><paragraph id="v160"><p id="v161" class="inline-container" style="letter-spacing:0em;">A window to another dimension that revolutionizes all kinds of amusing experience </p></paragraph><paragraph id="v162" style="font-weight:500;"><p id="v166" class="inline-container" style="letter-spacing:0em;">Want to be amused? <svg-icon-inline id="v167" style="display:inline-block;width:1em;height:1em;transform:scale(1,1) translate(0, 14.000000000000002%);transform-origin:bottom;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24" style="display:block;position:relative;transform:scale(1, 1);transform-origin:top;"><svg xmlns="http://www.w3.org/2000/svg" id="mdi-arrow-right" viewBox="0 0 24 24"><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg></svg></svg-icon-inline></p></paragraph></linear-layout></flipper><paragraph id="v168" style="line-height:1.3;font-weight:500;"><p id="v169" class="inline-container" style="letter-spacing:0em;">OUR SOFTWARE PARTNERS</p></paragraph></linear-layout><linear-layout id="v170"><paragraph id="v171"><p id="v172" class="inline-container" style="letter-spacing:0em;">This website is created using <a id="v173" href="ru" target="_self">Illumetry</a></p></paragraph></linear-layout></linear-layout></scroll-view><svg id="v174" style="display:none;"><defs><image href="data:application/octet-stream;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAASACADAREAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAQMEAv/EABgBAAMBAQAAAAAAAAAAAAAAAAECAwAE/9oADAMBAAIQAxAAAAFTtPQopkzVvOTbBTOV0h1QU3rDzR//xAAcEAACAgMBAQAAAAAAAAAAAAABAgADERIxECL/2gAIAQEAAQUC32NaiMuDA307AtY5aZ8XtvZ//8QAFxEBAQEBAAAAAAAAAAAAAAAAAQAQIP/aAAgBAwEBPwGJOF0nP//EABwRAAICAwEBAAAAAAAAAAAAAAABAhIQESEyM//aAAgBAgEBPwG406kVwkVLNLRtrg3iXhC+WP/EABsQAAIDAAMAAAAAAAAAAAAAAAABEBEhAiIx/9oACAEBAAY/AtopzfLw6YK5Q4//xAAdEAEAAgICAwAAAAAAAAAAAAABABEhMUGhEFGR/9oACAEBAAE/IajwN4iKdLc11LsyZ0xh1FbWhNiDcPIybffl2ofrOZ//2gAMAwEAAgADAAAAECFNZs9f/8QAGhEAAwADAQAAAAAAAAAAAAAAAAERECExQf/aAAgBAwEBPxC0n0lvC7sbV0OcTLjo5x//xAAbEQEAAwEAAwAAAAAAAAAAAAABABEhEDFBUf/aAAgBAgEBPxAoAe+aBcweKSlMDalhvDpCLv5HxP/EABoQAQADAQEBAAAAAAAAAAAAAAEAETEhUaH/2gAIAQEAAT8Qt4ClElIwu/r1xpc5UFg05KzTJhpeRZ4K+JALA8ddaxVd2M+DAxOOo6n/2Q==" id="030B0A83BFC745BD"></image><image href="data:application/octet-stream;base64,/9j/4AAQSkZJRgABAQIAHAAcAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAgACADASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAABAMCAf/EABUBAQEAAAAAAAAAAAAAAAAAAAEC/9oADAMBAAIQAxAAAAFlI5oVQmwhxBYumjbH/8QAHRAAAQUBAAMAAAAAAAAAAAAAAgABAxESExAhM//aAAgBAQABBQJ5Ml1BbDxJ9ImKiFkJepL66Ik+sxuNU1mBOXBcAX//xAAWEQEBAQAAAAAAAAAAAAAAAAAAEhD/2gAIAQMBAT8ByUv/xAAXEQEAAwAAAAAAAAAAAAAAAAAAEBIT/9oACAECAQE/AY0Xf//EACAQAAICAQMFAAAAAAAAAAAAAAABESExAiKREDJBYYH/2gAIAQEABj8C3tL1Bk7lz0+E6xPwJTZtjBFGVwJN2SVraRepswf/xAAeEAEAAgIDAAMAAAAAAAAAAAABABEhMUFRcaGx4f/aAAgBAQABPyGhLg0T8wf8wbUnECqt6y7x3o6jOhmE1FAsuLcwztmYivrOJcaCVGcMZjpi6qeGgEs/dTMO5zP/2gAMAwEAAgADAAAAEMI/Sv/EABcRAQEBAQAAAAAAAAAAAAAAAAABEVH/2gAIAQMBAT8QTXbUf//EABkRAAIDAQAAAAAAAAAAAAAAAAABESExUf/aAAgBAgEBPxCKHRwQen//xAAiEAEAAwABAwQDAAAAAAAAAAABABEhMXGBwUFRYaGRsfH/2gAIAQEAAT8Qcg7By9aeIJ6T5R4n7NjzM2IjozBdeb3thkuC37MuFLLPxTBC1M6M9og6bMWWwIZACjX9Rhqg0OeAu5g11KKdu03J8yvS4oVHQ/ipy+qf1Ki220m9p//Z" id="1E34B7896E9EC760"></image><image href="data:application/octet-stream;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAASACADAREAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAABAMFAf/EABcBAQEBAQAAAAAAAAAAAAAAAAABAgP/2gAMAwEAAhADEAAAAdYIcFgoFVV0JqjOLUbEzr//xAAdEAADAAICAwAAAAAAAAAAAAABAgMABBARExQz/9oACAEBAAEFAuwA95ofYRuL90xtdy3goDQhEGXJKx+m0zC3/8QAGhEBAQACAwAAAAAAAAAAAAAAAQAQESAhMf/aAAgBAwEBPwHhptQJdzPkY//EABoRAQEAAgMAAAAAAAAAAAAAAAEAEBECIUL/2gAIAQIBAT8BtZEtkowb6uN6cF//xAAiEAACAQMCBwAAAAAAAAAAAAAAARECECESMRMiQVFxgZH/2gAIAQEABj8CyQzar5bhrqKI5TWsezU5tTnuLyNS9j//xAAdEAEAAgMAAwEAAAAAAAAAAAABABEhMUFRYXHB/9oACAEBAAE/IWzQHuWkXthBCGPcJRiUSrC7YIhAB2XMiCq3b8jpKnhgAEC5cac7fYnbxCERyM//2gAMAwEAAgADAAAAEBkHSbaP/8QAGREBAQEBAQEAAAAAAAAAAAAAAQAxERAh/9oACAEDAQE/ELsffEHkNsKFOSe2NqL/xAAaEQEBAQEAAwAAAAAAAAAAAAABABExECHB/9oACAECAQE/EIj68IN2y7deF4YGXwnjES//xAAcEAEBAAIDAQEAAAAAAAAAAAABEQBRITFBYcH/2gAIAQEAAT8QgOvVDL4UAJG/cdqYKmXq3B0nBCQFmm/msMAnqHpODFIyAUqa4eU1gs4i8jyz3DgE8oc9OKbDdV6wKSND9yJMmkOtZ//Z" id="54AE10203658D396"></image><image href="data:application/octet-stream;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAYACADASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAEDBAL/xAAWAQEBAQAAAAAAAAAAAAAAAAACAAH/2gAMAwEAAhADEAAAAavM2NBl6t6oAbkFf//EABwQAAICAwEBAAAAAAAAAAAAAAECAAMREhMEFP/aAAgBAQABBQJ2fqfQwn0GJYxsWzV7G2ZBEtHbVemEmEmii3//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAEDAQE/AR//xAAWEQEBAQAAAAAAAAAAAAAAAAABABD/2gAIAQIBAT8BAk3/xAAhEAACAQIGAwAAAAAAAAAAAAAAARECMRASISJBkUJRYf/aAAgBAQAGPwKKTckeIp5FU9ZROXBU8o+R7Lvsu+yT/8QAHxABAAICAgIDAAAAAAAAAAAAAQARITFBcVGhYYHR/9oACAEBAAE/ITvSZp5itCeoNr0YWZnhiZw0X2zYHUe3juAINCZ+pelK+RKXHVNn7YCkwm75n//aAAwDAQACAAMAAAAQbyA8/8QAFhEBAQEAAAAAAAAAAAAAAAAAAQAR/9oACAEDAQE/EFRhsLC//8QAGBEBAQEBAQAAAAAAAAAAAAAAAQBRESH/2gAIAQIBAT8QYQEd292//8QAIRABAQABAwMFAAAAAAAAAAAAAREAITFBUWGxcYGRwfD/2gAIAQEAAT8Qft75NSccaYGZu5POBsKF0bw4/wAOWlBE4XbXIRcBXV6uQpKMoV+MVewbBMhBA2FqPGL5gC8lv3heGSQg9d8iqj+ucb6xKSu632z/2Q==" id="74D22433F8C80B0E"></image><image href="data:application/octet-stream;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAASACADAREAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAQMEAgX/xAAXAQADAQAAAAAAAAAAAAAAAAABAgMA/9oADAMBAAIQAxAAAAGh0ZisHKlDLvEDCNp7SkG7KkTr/8QAHxAAAwABAwUAAAAAAAAAAAAAAQIDAAQSIRMiMTIz/9oACAEBAAEFAuoMnNTHgK22sVmcHYgQ0Qo0orxpp/SXrXx//8QAGxEAAQUBAQAAAAAAAAAAAAAAAAECEBExAyL/2gAIAQMBAT8BnFKlvpKhopy0/8QAGxEAAgIDAQAAAAAAAAAAAAAAAAEQEQIDMUH/2gAIAQIBAT8BnwsuMlTuGI2cP//EAB4QAAICAQUBAAAAAAAAAAAAAAABAhESECExQWGB/9oACAEBAAY/AhOlwZeD26OhRc68Kzl9RSdk6Fr/AP/EABwQAQACAgMBAAAAAAAAAAAAAAEAIRExQWFxkf/aAAgBAQABPyGhN1AurfUwP0nGTbyMMijpjdIrEYYBrRUpn4xLaj1G/SNXl5mif//aAAwDAQACAAMAAAAQJxcKxa//xAAZEQACAwEAAAAAAAAAAAAAAAAAARARMSH/2gAIAQMBAT8QKEinRBK4ZWV1YM0bF6P/xAAaEQACAwEBAAAAAAAAAAAAAAAAAREhMRBB/9oACAECAQE/EGNjKculjIrp6PwyYHof/8QAHRABAQADAAIDAAAAAAAAAAAAAREAITFBYVFxkf/aAAgBAQABPxDsoVkAhbDsxKglyaurjry6k6bI/ZlPlxpcZkyRC83oLh61Yh7A9OPrSrJPhwgnlvR8ZB1iVvussQxhXmL9s//Z" id="907431284F4E0788"></image><filter id="A65402ECAD179F53"><feGaussianBlur stdDeviation="0 0.5"></feGaussianBlur></filter><filter id="A8D38B2D8722AFE8"><feGaussianBlur stdDeviation="0.5 0"></feGaussianBlur></filter><image href="data:application/octet-stream;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAYACADASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAABAAFAgP/xAAWAQEBAQAAAAAAAAAAAAAAAAAAAgH/2gAMAwEAAhADEAAAAdItn1LnCQC6rL8EVj//xAAcEAEAAwACAwAAAAAAAAAAAAACAQMRABITMTL/2gAIAQEAAQUCdsCVfsGx8qXau9dbPc7A5So8KQTyMuEsn4//xAAWEQADAAAAAAAAAAAAAAAAAAAAEBH/2gAIAQMBAT8BcP/EABcRAAMBAAAAAAAAAAAAAAAAAAABERD/2gAIAQIBAT8BxqFP/8QAHhAAAgICAgMAAAAAAAAAAAAAAAECESEiQXEQMYH/2gAIAQEABj8CqjWkVcX8IyfJ2vGzSIdGxiR7WBZ4P//EAB0QAQEBAQADAAMAAAAAAAAAAAERACExQVFxgeH/2gAIAQEAAT8hsCWXc+j6v8xyEflkmKLzGNLxxAmG2h9cQ764wqwmF6v3Hdb7V8bkQeG//9oADAMBAAIAAwAAABDHdyD/xAAZEQABBQAAAAAAAAAAAAAAAAAAARARITH/2gAIAQMBAT8QZL0gf//EABcRAQEBAQAAAAAAAAAAAAAAAAEAESH/2gAIAQIBAT8QMZAsHGUnb//EACAQAQADAAEFAAMAAAAAAAAAAAEAESFBMVFxgaGRsdH/2gAIAQEAAT8QDo3Q7W/yO2u6lT1FNs5Wf2TDFVSiAC5VeWEAA3W5e940clqotri40CJf+CDRwEUK8nqDs50KP0v7KK3WCq7cy9NANzif/9k=" id="BE9763960FBF3671"></image><image href="data:application/octet-stream;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAASACADAREAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABAIB/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/9oADAMBAAIQAxAAAAF9XGhQ9NywPENFitZSf//EABwQAAICAwEBAAAAAAAAAAAAAAECAAMREiExMv/aAAgBAQABBQKldauLMiF1MsQtHGTtrLV7k7OzSn7f3//EABsRAAEEAwAAAAAAAAAAAAAAAAABAhESECAx/9oACAEDAQE/AdayRU6NFz//xAAaEQACAgMAAAAAAAAAAAAAAAAAAQIQICEx/9oACAECAQE/AcWLY0T4K//EABwQAAIBBQEAAAAAAAAAAAAAAAABIQIQETFBUf/aAAgBAQAGPwJIlmzKKKfOitlQOTbsj//EABwQAQACAwEBAQAAAAAAAAAAAAEAESExQVGB4f/aAAgBAQABPyGy3UVBouFi8Sopac8jYuc9pV617AYqN4MSoIeio7hr2fqo8ntMJ8J//9oADAMBAAIAAwAAABCVKNNtn//EABkRAQEBAQEBAAAAAAAAAAAAAAEAESExEP/aAAgBAwEBPxCXkdkSxzbhksRvpvc08n5//8QAGhEBAQEAAwEAAAAAAAAAAAAAAQAREDFBIf/aAAgBAgEBPxB7urRhGc3JHtnUQmcBE+3V7f/EAB0QAQEAAgMBAQEAAAAAAAAAAAERACExQWFRkeH/2gAIAQEAAT8QShNc+q4PJcB7yJiDd1MIFRe4TzFsvKUO+3fw55uKwIFop1lIsZEL9m/cI7GrUJ+YVAXtWf0fEaGEt3wZxE2rrP/Z" id="C504CB8D5CCECF18"></image><image href="data:application/octet-stream;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAASACADAREAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAQFAQP/xAAYAQEBAQEBAAAAAAAAAAAAAAADAgEEAP/aAAwDAQACEAMQAAABid8bvmjwK1WwjX5JwHg9kBb2KqJ1/8QAGhAAAgMBAQAAAAAAAAAAAAAAAgMAARARE//aAAgBAQABBQLBVfPO9BkWwdCLn//EABoRAAMBAAMAAAAAAAAAAAAAAAABEQITIGH/2gAIAQMBAT8BGLaEQhw+mVFOv//EABwRAAMAAgMBAAAAAAAAAAAAAAABAhFBAxAhMv/aAAgBAgEBPwGp2cfyUOh1leirwfIkU8vJo13/AP/EABcQAAMBAAAAAAAAAAAAAAAAAAAQMTD/2gAIAQEABj8CUJj/AP/EABsQAAMAAwEBAAAAAAAAAAAAAAABESExQVFx/9oACAEBAAE/IVs6M1oUeArSZyJakd+nsVrOHBn6If/aAAwDAQACAAMAAAAQtlZ7hB//xAAZEQEBAQEBAQAAAAAAAAAAAAABABExEFH/2gAIAQMBAT8QLqT1gJpDLS2ncmJ8eCx3z//EABoRAQEBAQEBAQAAAAAAAAAAAAEAESExQXH/2gAIAQIBAT8QDGY1sseEI4xtjsBj9sRgSHuQ7vk+3//EACAQAQACAgEEAwAAAAAAAAAAAAEAESExYUFRcYGRobH/2gAIAQEAAT8QvQ1xEMGJGgbbKPuXg74z+SwqHzFUaPBDTJY2N+oQSqlV27Z1eIKYLHJafcBLQvvP/9k=" id="F5581BCED8FD2742"></image><image href="data:application/octet-stream;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAASACADAREAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAwQAAQIF/8QAFwEBAQEBAAAAAAAAAAAAAAAAAQACA//aAAwDAQACEAMQAAAB6ULsWNZppVqi0L6D57BjVp//xAAbEAEBAAIDAQAAAAAAAAAAAAABAgARAxIxQf/aAAgBAQABBQKd1hyVst7X5G8KQbDJqKz7yB1Ax8//xAAYEQADAQEAAAAAAAAAAAAAAAABEBECIP/aAAgBAwEBPwHmIirL/8QAGBEBAAMBAAAAAAAAAAAAAAAAEAABEQL/2gAIAQIBAT8BbNqa9v8A/8QAGxAAAgIDAQAAAAAAAAAAAAAAAREAECEiMQL/2gAIAQEABj8CLOHFrnmIiBRCnBPOwiBN8r//xAAdEAEAAgMAAwEAAAAAAAAAAAABABEhMUEQcYGR/9oACAEBAAE/IaK3ABjsKMeVLSnrnox7Suxha39hO8nXkQtTeacwWUbeojIGG0Pzwf/aAAwDAQACAAMAAAAQa7L5Kf8A/8QAGREAAgMBAAAAAAAAAAAAAAAAAAEQESEx/9oACAEDAQE/EC30vaHCbpTbs6I1g4//xAAaEQACAwEBAAAAAAAAAAAAAAAAAREhMRBB/9oACAECAQE/ECBqpMceRCIIq3yloWnh/8QAHxABAAICAgIDAAAAAAAAAAAAAQARITFBkVFxYYGx/9oACAEBAAE/ENAzhMIy7dfEG6CwTB6anVqN9TWcRAXDI3bfypZFEgiIb3iDCAAWU83HtQrTTjvU0OOE73hcqkPoQHAn/9k=" id="F9AAB33BBEC3198A"></image></defs></svg><extras id="extras"></extras></body></html>
